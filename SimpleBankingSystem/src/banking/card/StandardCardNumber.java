@@ -6,6 +6,10 @@ public class StandardCardNumber extends CardNumber {
         super(MII, BIN, customerID);
     }
 
+    public StandardCardNumber(String s) {
+        super(s);
+    }
+
     @Override
     public String toString() {
         return super.toString();

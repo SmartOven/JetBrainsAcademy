@@ -29,4 +29,12 @@ public class BankAccount {
         director.constructStandardCardNumber(builder);
         return builder.getResult();
     }
+
+    public CardNumber getCardNumber() {
+        return cardNumber;
+    }
+
+    public long getBalance() {
+        return balance;
+    }
 }
