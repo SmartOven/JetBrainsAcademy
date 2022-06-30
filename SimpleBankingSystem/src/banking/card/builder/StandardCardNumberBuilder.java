@@ -6,6 +6,7 @@ public class StandardCardNumberBuilder implements CardNumberBuilder {
     private int MII;
     private int BIN;
     private long customerID;
+    private int checkSum;
 
     @Override
     public void setMII(int MII) {
@@ -23,7 +24,12 @@ public class StandardCardNumberBuilder implements CardNumberBuilder {
     }
 
     @Override
+    public void setCheckSum(int checkSum) {
+        this.checkSum = checkSum;
+    }
+
+    @Override
     public StandardCardNumber getResult() {
-        return new StandardCardNumber(MII, BIN, customerID);
+        return new StandardCardNumber(MII, BIN, customerID, checkSum);
     }
 }

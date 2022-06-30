@@ -59,7 +59,7 @@ public class BankManager {
                         String userCardNumber = console.nextLine();
                         System.out.println("Enter your PIN:");
                         String pinCode = console.nextLine();
-                        if (!CardNumber.isCardNumber(userCardNumber)) {
+                        if (!CardNumber.isValidCardNumber(userCardNumber)) {
                             System.out.println("Wrong card number or PIN!");
                         } else {
                             CardNumber cardNumber = new StandardCardNumber(userCardNumber);
