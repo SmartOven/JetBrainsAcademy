@@ -13,8 +13,9 @@ import java.util.Scanner;
  * Wrapper class for Bank class
  */
 public class BankManager {
-    private Bank bank;
+    private final Bank bank;
     private BankAccount currentBankAccount;
+    private String currentPinCode;
     private BankManagerState state;
 
     private static final Map<BankManagerState, String> operationsInfo;
@@ -22,7 +23,7 @@ public class BankManager {
     static {
         operationsInfo = new HashMap<>();
         operationsInfo.put(BankManagerState.NOT_LOGGED, "1. Create an account\n2. Log into account\n0. Exit");
-        operationsInfo.put(BankManagerState.LOGGED, "1. Balance\n2. Log out\n0. Exit");
+        operationsInfo.put(BankManagerState.LOGGED, "1. Balance\n2. Add income\n3. Do transfer\n4. Close account\n5. Log out\n0. Exit");
     }
 
     public BankManager(Bank bank) {
@@ -47,14 +48,14 @@ public class BankManager {
             // Else resolve user input
             if (state.equals(BankManagerState.NOT_LOGGED)) {
                 switch (userInput) {
-                    case "1":
+                    case "1" -> {
                         String[] createdBankAccountInfo = createNewAccount();
                         System.out.println("Your card has been created\nYour card number:");
                         System.out.println(createdBankAccountInfo[0]);
                         System.out.println("Your card PIN:");
                         System.out.println(createdBankAccountInfo[1]);
-                        break;
-                    case "2":
+                    }
+                    case "2" -> {
                         System.out.println("Enter your card number:");
                         String userCardNumber = console.nextLine();
                         System.out.println("Enter your PIN:");
@@ -67,21 +68,58 @@ public class BankManager {
                             if (loginSuccessful) {
                                 System.out.println("You have successfully logged in!");
                                 state = BankManagerState.LOGGED;
+                                currentPinCode = pinCode;
                             } else {
                                 System.out.println("Wrong card number or PIN!");
                             }
                         }
-                        break;
+                    }
                 }
             } else if (state.equals(BankManagerState.LOGGED)) {
                 switch (userInput) {
-                    case "1":
-                        System.out.println("Balance: " + currentBankAccount.getBalance());
-                        break;
-                    case "2":
+                    case "1" -> System.out.println("Balance: " + currentBankAccount.getBalance());
+                    case "2" -> {
+                        System.out.println("Enter income:");
+                        int income = Integer.parseInt(console.nextLine());
+                        bank.addIncome(currentBankAccount, income);
+                        System.out.println("Income was added!");
+                    }
+                    case "3" -> {
+                        System.out.println("Transfer");
+                        System.out.println("Enter card number:");
+                        String transferCardNumber = console.nextLine();
+                        if (transferCardNumber.equals(currentBankAccount.getCardNumber().toString())) {
+                            System.out.println("You can't transfer money to the same account!");
+                        } else if (!CardNumber.isValidCardNumber(transferCardNumber)) {
+                            System.out.println("Probably you made a mistake in the card number. Please try again!");
+                        } else if (!bank.hasBankAccount(transferCardNumber)) {
+                            System.out.println("Such a card does not exist.");
+                        } else {
+                            System.out.println("Enter how much money you want to transfer:");
+                            int amount = Integer.parseInt(console.nextLine());
+                            int moneyHas = currentBankAccount.getBalance();
+                            if (moneyHas < amount) {
+                                System.out.println("Not enough money!");
+                            } else {
+                                bank.transferMoney(currentBankAccount.getCardNumber().toString(), transferCardNumber, amount);
+                                System.out.println("Success!");
+                            }
+                        }
+                    }
+                    case "4" -> {
+                        bank.deleteAccount(currentBankAccount);
+                        System.out.println("The account has been closed!");
+                        currentBankAccount = null;
+                        state = BankManagerState.NOT_LOGGED;
+                    }
+                    case "5" -> {
                         System.out.println("You have successfully logged out!");
                         currentBankAccount = null;
                         state = BankManagerState.NOT_LOGGED;
+                    }
+                }
+                if (currentBankAccount != null) {
+                    currentBankAccount = bank.getBankAccount(currentPinCode, currentBankAccount.getCardNumber());
                 }
             }
         }

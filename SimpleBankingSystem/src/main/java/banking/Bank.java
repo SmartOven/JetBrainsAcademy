@@ -7,7 +7,9 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Objects;
 
+import banking.card.StandardCardNumber;
 import org.sqlite.SQLiteDataSource;
 
 public class Bank {
@@ -25,6 +27,60 @@ public class Bank {
 
     public BankAccount getBankAccount(String pinCode, CardNumber cardNumber) {
         return getBankAccountFromTableIfExists(pinCode, cardNumber);
+    }
+
+    public boolean hasBankAccount(String cardNumber) {
+        try (Connection con = dataSource.getConnection();
+             Statement statement = con.createStatement();
+             ResultSet cardNumberInfo = statement.executeQuery(
+                     "SELECT COUNT(*) AS 'has_card_number' FROM card WHERE number = '" + cardNumber + "'"
+             )) {
+            cardNumberInfo.next();
+            int hasCardNumber = cardNumberInfo.getInt("has_card_number");
+            return hasCardNumber == 1;
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
+    public void transferMoney(String source, String target, int amount) {
+        BankAccount sourceBankAccount = getBankAccountFromTableIfExists(source);
+        BankAccount targetBankAccount = getBankAccountFromTableIfExists(target);
+        if (targetBankAccount != null && sourceBankAccount != null) {
+            setBalance(sourceBankAccount, sourceBankAccount.getBalance() - amount);
+            setBalance(targetBankAccount, targetBankAccount.getBalance() + amount);
+        }
+    }
+
+    public void addIncome(String cardNumber, int income) {
+        addIncome(getBankAccountFromTableIfExists(cardNumber), income);
+    }
+
+    public void addIncome(BankAccount bankAccount, int income) {
+        if (bankAccount != null) {
+            setBalance(bankAccount, bankAccount.getBalance() + income);
+        }
+    }
+
+    public void deleteAccount(BankAccount bankAccount) {
+        try (Connection connection = dataSource.getConnection();
+             Statement statement = connection.createStatement()) {
+            statement.executeUpdate(
+                    "DELETE FROM card WHERE number = '" + bankAccount.getCardNumber().toString() + "'"
+            );
+        } catch (SQLException e) {
+            System.out.println("Account wasn't deleted (card)");
+        }
+    }
+
+    private void setBalance(BankAccount bankAccount, int newBalance) {
+        String cardNumber = bankAccount.getCardNumber().toString();
+        try (Connection connection = dataSource.getConnection();
+             Statement statement = connection.createStatement()) {
+            statement.executeUpdate("UPDATE card SET balance = " + newBalance + " WHERE number = '" + cardNumber + "'");
+        } catch (SQLException e) {
+            System.out.println("Balance not updated (card)");
+        }
     }
 
     private void createTableIfNotExists() {
@@ -84,6 +140,28 @@ public class Bank {
             // If exists -> return BankAccount object with cardNumber and balance
             int balance = bankAccountValues.getInt("balance");
             return new BankAccount(cardNumber, balance);
+        } catch (SQLException e) {
+            return null;
+        }
+    }
+
+    private BankAccount getBankAccountFromTableIfExists(String cardNumber) {
+        try (Connection con = dataSource.getConnection();
+             Statement statement = con.createStatement();
+             ResultSet bankAccountValues = statement.executeQuery(
+                     "SELECT number, pin, balance " +
+                             "FROM card " +
+                             "WHERE number = '" + cardNumber + "'"
+             )) {
+            // Getting bank account from table by its cardNumber and pinCode
+            // If not exists -> return null
+            if (!bankAccountValues.next()) {
+                return null;
+            }
+
+            // If exists -> return BankAccount object with cardNumber and balance
+            int balance = bankAccountValues.getInt("balance");
+            return new BankAccount(new StandardCardNumber(cardNumber), balance);
         } catch (SQLException e) {
             return null;
         }
