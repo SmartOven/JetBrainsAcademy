@@ -4,18 +4,16 @@ import banking.card.CardNumber;
 import banking.card.builder.StandardCardNumberBuilder;
 import banking.card.director.Director;
 
-import java.util.Random;
-
 /**
  * Equals to the BankCard
  */
 public class BankAccount {
-    private CardNumber cardNumber;
-    private long balance;
+    private final CardNumber cardNumber;
+    private int balance;
 
-    public BankAccount(CardNumber cardNumber) {
+    public BankAccount(CardNumber cardNumber, int balance) {
         this.cardNumber = cardNumber;
-        this.balance = 0;
+        this.balance = balance;
     }
 
     public BankAccount() {
@@ -34,7 +32,7 @@ public class BankAccount {
         return cardNumber;
     }
 
-    public long getBalance() {
+    public int getBalance() {
         return balance;
     }
 }
