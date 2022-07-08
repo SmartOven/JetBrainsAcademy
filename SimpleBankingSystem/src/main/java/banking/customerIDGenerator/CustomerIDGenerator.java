@@ -44,7 +44,7 @@ public class CustomerIDGenerator {
 
         try (Connection connection = dataSource.getConnection();
              Statement statement = connection.createStatement()) {
-            statement.executeUpdate("UPDATE customer_id SET id = " + (nextAvailableID + 1));
+            statement.executeUpdate("UPDATE customer_id SET id = " + (nextAvailableID + 1) + " WHERE id = " + nextAvailableID);
         } catch (SQLException e) {
             System.out.println("Data not updated (customer_id)");
         }
