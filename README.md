@@ -9,7 +9,7 @@ JetBrains Academy projects from Java Backend Developer course
 4) [Simple Tic-Tac-Toe](https://github.com/SmartOven/JetBrainsAcademy/tree/main/SimpleTicTacToe)
 
 ### Medium
-
+1) [Simple Banking System](https://github.com/SmartOven/JetBrainsAcademy/tree/main/SimpleBankingSystem)
 
 ### Hard
 
