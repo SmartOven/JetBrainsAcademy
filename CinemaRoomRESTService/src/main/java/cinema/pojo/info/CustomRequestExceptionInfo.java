@@ -1,9 +1,9 @@
 package cinema.pojo.info;
 
-public class PurchaseExceptionInfo {
+public class CustomRequestExceptionInfo {
     private String error;
 
-    public PurchaseExceptionInfo(String error) {
+    public CustomRequestExceptionInfo(String error) {
         this.error = error;
     }
 

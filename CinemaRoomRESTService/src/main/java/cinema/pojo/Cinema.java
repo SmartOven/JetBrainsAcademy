@@ -9,9 +9,12 @@ public class Cinema {
     private final TreeSet<Seat> availableSeats;
     private final Map<UUID, Seat> purchasedTickets;
 
+    private final String employeeSecretPassword;
+
     public Cinema(int rows, int columns) {
         this.rows = rows;
         this.columns = columns;
+        employeeSecretPassword = "secret_password";
 
         seats = new ArrayList<>();
         for (int i = 0; i < rows; i++) {
@@ -108,5 +111,9 @@ public class Cinema {
         purchasedTickets.remove(token);
 
         return seat;
+    }
+
+    public boolean isCorrectPassword(String password) {
+        return password.equals(employeeSecretPassword);
     }
 }

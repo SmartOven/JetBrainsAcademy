@@ -1,7 +1,7 @@
 package cinema.controllers;
 
 import cinema.Main;
-import cinema.exceptions.purchase.PurchaseException;
+import cinema.exceptions.CustomRequestException;
 import cinema.pojo.Cinema;
 import cinema.pojo.Seat;
 import cinema.pojo.info.ReturnedTicketInfo;
@@ -28,12 +28,12 @@ public class PurchaseTicketController {
 
         // Checking if row or column are out of bounds
         if (row < 0 || row >= cinema.getRows() || column < 0 || column >= cinema.getRows()) {
-            throw new PurchaseException("The number of a row or a column is out of bounds!");
+            throw new CustomRequestException("The number of a row or a column is out of bounds!");
         }
 
         Seat purchasedSeat = cinema.purchaseSeat(row, column);
         if (purchasedSeat == null) {
-            throw new PurchaseException("The ticket has been already purchased!");
+            throw new CustomRequestException("The ticket has been already purchased!");
         }
 
         return new PurchasedTicketInfo(purchasedSeat);
@@ -49,7 +49,7 @@ public class PurchaseTicketController {
 
         // If it doesn't exist -> throw exception
         if (returnedSeat == null) {
-            throw new PurchaseException("Wrong token!");
+            throw new CustomRequestException("Wrong token!");
         }
 
         return new ReturnedTicketInfo(new SeatInfo(returnedSeat));

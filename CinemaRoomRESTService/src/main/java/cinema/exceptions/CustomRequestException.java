@@ -1,9 +1,9 @@
-package cinema.exceptions.purchase;
+package cinema.exceptions;
 
-public class PurchaseException extends RuntimeException {
+public class CustomRequestException extends RuntimeException {
     private String error;
 
-    public PurchaseException(String error) {
+    public CustomRequestException(String error) {
         this.error = error;
     }
 
