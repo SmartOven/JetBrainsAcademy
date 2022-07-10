@@ -10,6 +10,7 @@ JetBrains Academy projects from Java Backend Developer course
 
 ### Medium
 1) [Simple Banking System](https://github.com/SmartOven/JetBrainsAcademy/tree/main/SimpleBankingSystem)
+2) [Cinema Room REST Service](https://github.com/SmartOven/JetBrainsAcademy/tree/main/CinemaRoomRESTService)
 
 ### Hard
 
