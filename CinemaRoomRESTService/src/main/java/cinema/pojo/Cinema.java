@@ -89,6 +89,11 @@ public class Cinema {
         return seat;
     }
 
+    /**
+     * Returning ticket by it's token
+     * @param token ticket's token
+     * @return returned seat or null if the token doesn't exist
+     */
     public Seat returnSeat(UUID token) {
         Seat seat = purchasedTickets.getOrDefault(token, null);
         if (seat == null) {
