@@ -14,7 +14,7 @@ public class Cinema {
     public Cinema(int rows, int columns) {
         this.rows = rows;
         this.columns = columns;
-        employeeSecretPassword = "secret_password";
+        employeeSecretPassword = "super_secret";
 
         seats = new ArrayList<>();
         for (int i = 0; i < rows; i++) {
