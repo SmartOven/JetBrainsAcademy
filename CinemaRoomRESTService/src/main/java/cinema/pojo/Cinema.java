@@ -75,7 +75,7 @@ public class Cinema {
      */
     public Seat purchaseSeat(int row, int column) {
         // Getting seat and checking if it is already busy
-        Seat seat = seats.get(row * column + column);
+        Seat seat = seats.get(row * columns + column);
         if (seat.isBusy()) {
             return null;
         }
