@@ -30,6 +30,6 @@ public class SellingStatisticsController {
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public ResponseEntity<CustomRequestExceptionInfo> handleMissingParams(MissingServletRequestParameterException e) {
         CustomRequestExceptionInfo error = new CustomRequestExceptionInfo("The password is wrong!");
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
     }
 }
