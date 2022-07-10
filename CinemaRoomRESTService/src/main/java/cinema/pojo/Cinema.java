@@ -1,14 +1,19 @@
-package cinema.util;
+package cinema.pojo;
 
 public class Cinema {
     private int rows;
     private int columns;
-    private boolean[][] seats;
+    private Seat[][] seats;
 
     public Cinema(int rows, int columns) {
         this.rows = rows;
         this.columns = columns;
-        this.seats = new boolean[rows][columns];
+        this.seats = new Seat[rows][columns];
+        for (int i = 0; i < seats.length; i++) {
+            for (int j = 0; j < seats[i].length; j++) {
+                seats[i][j] = new Seat(i + 1, j + 1);
+            }
+        }
     }
 
     public int getRows() {
@@ -27,19 +32,11 @@ public class Cinema {
         this.columns = columns;
     }
 
-    public boolean[][] getSeats() {
+    public Seat[][] getSeats() {
         return seats;
     }
 
-    public void setSeats(boolean[][] seats) {
+    public void setSeats(Seat[][] seats) {
         this.seats = seats;
-    }
-
-    public void setPurchased(int row, int column) {
-        seats[row][column] = true;
-    }
-
-    public boolean isPurchased(int row, int column) {
-        return seats[row][column];
     }
 }

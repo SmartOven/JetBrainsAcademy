@@ -1,4 +1,7 @@
-package cinema.util;
+package cinema.pojo.info;
+
+import cinema.pojo.Cinema;
+import cinema.pojo.Seat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,18 +9,17 @@ import java.util.List;
 public class AvailableSeatsInfo {
     public int total_rows;
     public int total_columns;
-    public List<Seat> available_seats;
+    public List<SeatInfo> available_seats;
 
     public AvailableSeatsInfo(Cinema cinema) {
         total_rows = cinema.getRows();
         total_columns = cinema.getColumns();
         available_seats = new ArrayList<>();
-        boolean[][] seats = cinema.getSeats();
-        for (int i = 0; i < total_rows; i++) {
-            for (int j = 0; j < total_columns; j++) {
-                // If seat is empty
-                if (!seats[i][j]) {
-                    available_seats.add(new Seat(i + 1, j + 1));
+        for (Seat[] seatsRow : cinema.getSeats()) {
+            for (Seat seat : seatsRow) {
+                // If seat is not busy
+                if (!seat.isBusy()) {
+                    available_seats.add(new SeatInfo(seat));
                 }
             }
         }
