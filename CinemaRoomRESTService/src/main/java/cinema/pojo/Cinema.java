@@ -1,19 +1,39 @@
 package cinema.pojo;
 
+import java.util.*;
+
 public class Cinema {
     private int rows;
     private int columns;
-    private Seat[][] seats;
+    private final List<Seat> seats;
+    private final TreeSet<Seat> availableSeats;
+    private final Map<UUID, Seat> purchasedTickets;
 
     public Cinema(int rows, int columns) {
         this.rows = rows;
         this.columns = columns;
-        this.seats = new Seat[rows][columns];
-        for (int i = 0; i < seats.length; i++) {
-            for (int j = 0; j < seats[i].length; j++) {
-                seats[i][j] = new Seat(i + 1, j + 1);
+
+        seats = new ArrayList<>();
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                seats.add(new Seat(i + 1, j + 1));
             }
         }
+
+        // Setting up available seats set
+        availableSeats = new TreeSet<>((o1, o2) -> {
+            int o1Row = o1.getRow();
+            int o2Row = o2.getRow();
+            if (o1Row != o2Row) {
+                return o1Row - o2Row;
+            } else {
+                return o1.getColumn() - o2.getColumn();
+            }
+        });
+
+        // Initially every seat is available and purchased tickets doesn't exist
+        availableSeats.addAll(seats);
+        purchasedTickets = new HashMap<>();
     }
 
     public int getRows() {
@@ -32,11 +52,56 @@ public class Cinema {
         this.columns = columns;
     }
 
-    public Seat[][] getSeats() {
+    public TreeSet<Seat> getAvailableSeats() {
+        return availableSeats;
+    }
+
+    public Map<UUID, Seat> getPurchasedTickets() {
+        return purchasedTickets;
+    }
+
+    public List<Seat> getSeats() {
         return seats;
     }
 
-    public void setSeats(Seat[][] seats) {
-        this.seats = seats;
+    /**
+     * Purchasing seat in cinema
+     * @param row seat's row
+     * @param column seat's column
+     * @return purchased seat or null if it is already busy
+     */
+    public Seat purchaseSeat(int row, int column) {
+        // Getting seat and checking if it is already busy
+        Seat seat = seats.get(row * column + column);
+        if (seat.isBusy()) {
+            return null;
+        }
+
+        UUID token = UUID.randomUUID();
+
+        // Making it busy (setting up purchase UUID for it)
+        seat.setPurchaseToken(token);
+
+        // Remove it from available seats and add ticket to the map
+        availableSeats.remove(seat);
+        purchasedTickets.put(token, seat);
+
+        return seat;
+    }
+
+    public Seat returnSeat(UUID token) {
+        Seat seat = purchasedTickets.getOrDefault(token, null);
+        if (seat == null) {
+            return null;
+        }
+
+        // Make it free again
+        seat.setPurchaseToken(null);
+
+        // Add it to available seats and remove ticket from the map
+        availableSeats.add(seat);
+        purchasedTickets.remove(token);
+
+        return seat;
     }
 }

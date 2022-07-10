@@ -15,13 +15,8 @@ public class AvailableSeatsInfo {
         total_rows = cinema.getRows();
         total_columns = cinema.getColumns();
         available_seats = new ArrayList<>();
-        for (Seat[] seatsRow : cinema.getSeats()) {
-            for (Seat seat : seatsRow) {
-                // If seat is not busy
-                if (!seat.isBusy()) {
-                    available_seats.add(new SeatInfo(seat));
-                }
-            }
+        for (Seat seat : cinema.getAvailableSeats()) {
+            available_seats.add(new SeatInfo(seat));
         }
     }
 }

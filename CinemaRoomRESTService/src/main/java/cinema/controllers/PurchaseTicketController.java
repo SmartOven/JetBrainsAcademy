@@ -31,16 +31,12 @@ public class PurchaseTicketController {
             throw new PurchaseException("The number of a row or a column is out of bounds!");
         }
 
-        // Getting seat and checking if it is already busy
-        Seat seat = cinema.getSeats()[row][column];
-        if (seat.isBusy()) {
+        Seat purchasedSeat = cinema.purchaseSeat(row, column);
+        if (purchasedSeat == null) {
             throw new PurchaseException("The ticket has been already purchased!");
         }
 
-        // Making it busy (setting up purchase UUID for it)
-        seat.setPurchaseToken(UUID.randomUUID());
-
-        return new PurchasedTicketInfo(seat);
+        return new PurchasedTicketInfo(purchasedSeat);
     }
 
     @PostMapping("/return")
@@ -49,23 +45,12 @@ public class PurchaseTicketController {
         UUID token = ticketToken.getToken();
 
         // Getting returned seat by token (if it exists)
-        Seat returnedSeat = null;
-        for (Seat[] seatsRow : cinema.getSeats()) {
-            for (Seat seat : seatsRow) {
-                if (seat.isBusy() && seat.getPurchaseToken().equals(token)) {
-                    returnedSeat = seat;
-                    break;
-                }
-            }
-        }
+        Seat returnedSeat = cinema.returnSeat(token);
 
         // If it doesn't exist -> throw exception
         if (returnedSeat == null) {
             throw new PurchaseException("Wrong token!");
         }
-
-        // Make it free again
-        returnedSeat.setPurchaseToken(null);
 
         return new ReturnedTicketInfo(new SeatInfo(returnedSeat));
     }
