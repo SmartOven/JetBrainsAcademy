@@ -1,10 +1,10 @@
-package com.github.smartoven.cinemaroomrestservice;
+package cinema;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class CinemaRoomRestServiceApplicationTests {
+class MainTests {
 
     @Test
     void contextLoads() {
