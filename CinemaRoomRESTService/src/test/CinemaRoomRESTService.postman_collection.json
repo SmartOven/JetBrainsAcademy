@@ -1,0 +1,283 @@
+{
+	"info": {
+		"_postman_id": "5853d634-1c26-47a8-9d32-5c0692fad4f1",
+		"name": "Cinema Room REST Service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21464207"
+	},
+	"item": [
+		{
+			"name": "GET",
+			"item": [
+				{
+					"name": "Positive testing",
+					"item": [
+						{
+							"name": "Get available seats",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/seats",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"seats"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Negative testing",
+					"item": []
+				}
+			]
+		},
+		{
+			"name": "POST",
+			"item": [
+				{
+					"name": "Positive testing",
+					"item": [
+						{
+							"name": "Purchase available ticket",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"row\" : 1,\r\n    \"column\" : 1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/purchase",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"purchase"
+									],
+									"query": [
+										{
+											"key": "row",
+											"value": "1",
+											"disabled": true
+										},
+										{
+											"key": "column",
+											"value": "1",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Return purchased ticket",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"token\": \"00ae15f2-1ab6-4a02-a01f-07810b42c0ee\"}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/return",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"return"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get employee statistics (by correct password)",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/stats?password=secret_password",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"stats"
+									],
+									"query": [
+										{
+											"key": "password",
+											"value": "super_secret"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Negative testing",
+					"item": [
+						{
+							"name": "Purchase unavailable ticket",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"row\" : 1,\r\n    \"column\" : 1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/purchase",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"purchase"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Purchase out of bounds ticket",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"row\" : 0,\r\n    \"column\" : 1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/purchase",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"purchase"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Return non-existing ticket",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"token\": \"00ae15f2-1ab6-4a02-a01f-07810b42c0ee\"}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/return",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"return"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get employee statistics (by wrong password)",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/stats?password=1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"stats"
+									],
+									"query": [
+										{
+											"key": "password",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get employee statistics (by no password parameter)",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/stats?passwd=not_a_password",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"stats"
+									],
+									"query": [
+										{
+											"key": "passwd",
+											"value": "not_a_password"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}
