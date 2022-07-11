@@ -1,13 +1,14 @@
 package cinema.pojo;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Cinema {
     private int rows;
     private int columns;
     private final List<Seat> seats;
     private final TreeSet<Seat> availableSeats;
-    private final Map<UUID, Seat> purchasedTickets;
+    private final ConcurrentHashMap<UUID, Seat> purchasedTickets;
 
     private final String employeeSecretPassword;
 
@@ -36,7 +37,7 @@ public class Cinema {
 
         // Initially every seat is available and purchased tickets doesn't exist
         availableSeats.addAll(seats);
-        purchasedTickets = new HashMap<>();
+        purchasedTickets = new ConcurrentHashMap<>();
     }
 
     public int getRows() {
@@ -69,11 +70,12 @@ public class Cinema {
 
     /**
      * Purchasing seat in cinema
-     * @param row seat's row
+     *
+     * @param row    seat's row
      * @param column seat's column
      * @return purchased seat or null if it is already busy
      */
-    public Seat purchaseSeat(int row, int column) {
+    public synchronized Seat purchaseSeat(int row, int column) {
         // Getting seat and checking if it is already busy
         Seat seat = seats.get(row * columns + column);
         if (seat.isBusy()) {
@@ -94,10 +96,11 @@ public class Cinema {
 
     /**
      * Returning ticket by it's token
+     *
      * @param token ticket's token
      * @return returned seat or null if the token doesn't exist
      */
-    public Seat returnSeat(UUID token) {
+    public synchronized Seat returnSeat(UUID token) {
         Seat seat = purchasedTickets.getOrDefault(token, null);
         if (seat == null) {
             return null;
