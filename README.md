@@ -11,7 +11,8 @@ JetBrains Academy projects from Java Backend Developer course
 ### Medium
 1) [Simple Banking System](https://github.com/SmartOven/JetBrainsAcademy/tree/main/SimpleBankingSystem)
 2) [Cinema Room REST Service](https://github.com/SmartOven/JetBrainsAcademy/tree/main/CinemaRoomRESTService)
-3) [Bulls and Cows](https://github.com/SmartOven/JetBrainsAcademy/tree/main/BullsAndCows/src/bullscows)
+3) [Bulls and Cows](https://github.com/SmartOven/JetBrainsAcademy/tree/main/BullsAndCows)
+4) [Amazing Numbers](https://github.com/SmartOven/JetBrainsAcademy/tree/main/AmazingNumbers)
 
 ### Hard
 
