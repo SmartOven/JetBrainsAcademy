@@ -13,6 +13,7 @@ JetBrains Academy projects from Java Backend Developer course
 2) [Cinema Room REST Service](https://github.com/SmartOven/JetBrainsAcademy/tree/main/CinemaRoomRESTService)
 3) [Bulls and Cows](https://github.com/SmartOven/JetBrainsAcademy/tree/main/BullsAndCows)
 4) [Amazing Numbers](https://github.com/SmartOven/JetBrainsAcademy/tree/main/AmazingNumbers)
+5) [Number Base Converter](https://github.com/SmartOven/JetBrainsAcademy/tree/main/NumberBaseConverter)
 
 ### Hard
 
