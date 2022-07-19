@@ -7,6 +7,7 @@ import cinema.pojo.Seat;
 import cinema.pojo.info.ReturnedTicketInfo;
 import cinema.pojo.info.SeatInfo;
 import cinema.pojo.info.PurchasedTicketInfo;
+import cinema.pojo.info.TicketTokenInfo;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,7 +41,7 @@ public class PurchaseTicketController {
     }
 
     @PostMapping("/return")
-    public ReturnedTicketInfo returnTicketByUUID(@RequestBody TicketToken ticketToken) {
+    public ReturnedTicketInfo returnTicketByUUID(@RequestBody TicketTokenInfo ticketToken) {
         Cinema cinema = Main.cinema;
         UUID token = ticketToken.getToken();
 
@@ -53,17 +54,5 @@ public class PurchaseTicketController {
         }
 
         return new ReturnedTicketInfo(new SeatInfo(returnedSeat));
-    }
-
-    private static class TicketToken {
-        private UUID token;
-
-        public UUID getToken() {
-            return token;
-        }
-
-        public void setToken(UUID token) {
-            this.token = token;
-        }
     }
 }
