@@ -14,8 +14,6 @@ public class BullsCowsGame {
 
         String symbolsRange = charactersRange > 10 ? String.format(", a-%c", alphabet.charAt(charactersRange - 11)) : "";
         System.out.printf("The secret is prepared: %s (0-9%s).\n", "*".repeat(length), symbolsRange);
-
-//        System.out.println(secretCode);
         return secretCode;
     }
 
@@ -45,7 +43,6 @@ public class BullsCowsGame {
         }
 
         if (bulls == 0 && cows == 0) {
-//            return String.format("None. The secret code is %s.", correctAnswer);
             return "None.";
         }
 
@@ -62,7 +59,6 @@ public class BullsCowsGame {
             }
         }
 
-//        appendSecretCode(grade, correctAnswer);
         return grade.toString();
     }
 
@@ -78,9 +74,5 @@ public class BullsCowsGame {
         if (cows > 1) {
             grade.append("s");
         }
-    }
-
-    private static void appendSecretCode(StringBuilder grade, String secretCode) {
-        grade.append(". The secret code is ").append(secretCode).append(".");
     }
 }
