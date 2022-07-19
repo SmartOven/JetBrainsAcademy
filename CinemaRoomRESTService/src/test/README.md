@@ -1,5 +1,6 @@
 # Testing this service via Postman
-HOW TO simply test the service with Postman requests
+HOW TO simply test the service using Postman requests
+[File](https://github.com/SmartOven/JetBrainsAcademy/blob/main/CinemaRoomRESTService/src/test/CinemaRoomRESTService.postman_collection.json) with Postman requests
 
 ## Purchase/return ticket test
 1) Start the service
