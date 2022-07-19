@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 /**
  * Cinema class
+ *
  * @author Yaroslav Panteleev
  */
 public class Cinema {
@@ -24,16 +25,13 @@ public class Cinema {
             System.out.println();
             switch (userInput) {
                 // Print cinema state
-                case "1" ->
-                        System.out.println(cinema);
+                case "1" -> System.out.println(cinema);
 
                 // Book seat in cinema
-                case "2" ->
-                        cinema.bookSeat();
+                case "2" -> cinema.bookSeat();
 
                 // Print cinema statistics
-                case "3" ->
-                        cinema.printStatistics();
+                case "3" -> cinema.printStatistics();
             }
         }
     }
@@ -64,7 +62,6 @@ public class Cinema {
     }
 
     /**
-     *
      * @return Valid rows number from user input
      */
     private int inputNumberOfRows() {
