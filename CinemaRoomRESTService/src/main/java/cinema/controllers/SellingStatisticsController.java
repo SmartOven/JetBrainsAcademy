@@ -26,10 +26,4 @@ public class SellingStatisticsController {
 
         return new SellingStatisticsInfo(cinema);
     }
-
-    @ExceptionHandler(MissingServletRequestParameterException.class)
-    public ResponseEntity<CustomRequestExceptionInfo> handleMissingParams(MissingServletRequestParameterException e) {
-        CustomRequestExceptionInfo error = new CustomRequestExceptionInfo("The password is wrong!");
-        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
-    }
 }
