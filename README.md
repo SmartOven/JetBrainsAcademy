@@ -1,5 +1,5 @@
 # JetBrainsAcademy
-JetBrains Academy projects from Java Backend Developer course
+JetBrains Academy projects from [Java Backend Developer](https://hyperskill.org/tracks/12) track
 
 ## Finished projects
 ### Easy
