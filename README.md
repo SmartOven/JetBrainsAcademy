@@ -21,6 +21,7 @@ JetBrains Academy projects from [Java Backend Developer](https://hyperskill.org/
 6) [Phone Book](https://github.com/SmartOven/JetBrainsAcademy/tree/main/PhoneBook)
 
 ### Hard
+1) [Car Sharing](https://github.com/SmartOven/JetBrainsAcademy/tree/main/CarSharing)
 
 ### Challenging
 
