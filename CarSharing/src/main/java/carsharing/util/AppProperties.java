@@ -13,7 +13,6 @@ public class AppProperties {
     private static String dbName;
 
     static {
-//        propertiesPath = "./src/carsharing/db/application.properties";
         propertiesPath = "./CarSharing/src/main/resources/application.properties";
         properties = new Properties();
         try (Reader reader = new BufferedReader(new FileReader(propertiesPath))) {
@@ -55,5 +54,9 @@ public class AppProperties {
     public static void setVersion(String version) {
         properties.setProperty("version", version);
         save();
+    }
+
+    public static String getJdbcDriver() {
+        return properties.getProperty("jdbcDriver");
     }
 }
