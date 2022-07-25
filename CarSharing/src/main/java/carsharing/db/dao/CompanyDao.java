@@ -103,7 +103,6 @@ public class CompanyDao implements Dao<Company> {
         String insertQuery = "INSERT INTO COMPANY (NAME)" +
                 "VALUES (?)";
 
-        // Getting result of SQL query
         try (Connection connection = DriverManager.getConnection(dbUrl);
              PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
             connection.setAutoCommit(true);
@@ -127,7 +126,6 @@ public class CompanyDao implements Dao<Company> {
                 "WHERE ID = ?";
         String name = params[1];
 
-        // Getting result of SQL query
         try (Connection connection = DriverManager.getConnection(dbUrl);
              PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
             connection.setAutoCommit(true);
@@ -149,7 +147,6 @@ public class CompanyDao implements Dao<Company> {
         String insertQuery = "DELETE FROM COMPANY " +
                 "WHERE ID = ?";
 
-        // Getting result of SQL query
         try (Connection connection = DriverManager.getConnection(dbUrl);
              PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
             connection.setAutoCommit(true);

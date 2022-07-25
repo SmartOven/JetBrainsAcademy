@@ -1,21 +1,19 @@
 package carsharing.util.menu;
 
-import carsharing.db.dao.CompanyDao;
 import carsharing.db.tables.Company;
 import carsharing.util.menu.factory.MenuFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CompanyChoosingMenu implements Menu {
-    private final List<String> options;
+    private List<String> options;
 
-    public CompanyChoosingMenu() {
-        options = CompanyDao.getInstance()
-                .getAll()
-                .stream()
-                .map(Company::getName)
-                .toList();
-
+    public void setCompanies(List<Company> companies) {
+        options = new ArrayList<>();
+        for (Company company : companies) {
+            options.add(company.getName());
+        }
     }
 
     @Override
@@ -25,11 +23,6 @@ public class CompanyChoosingMenu implements Menu {
 
     @Override
     public void render() {
-        if (isCompanyListEmpty()) {
-            System.out.println("The company list is empty!");
-            return;
-        }
-
         System.out.println("Choose the company:");
         for (int i = 0; i < options.size(); i++) {
             System.out.println(i + 1 + ". " + options.get(i));
@@ -45,7 +38,7 @@ public class CompanyChoosingMenu implements Menu {
     public Menu doAction(String id) {
         // No companies -> go to main menu
         if (isCompanyListEmpty()) {
-            return MenuFactory.getMainMenu();
+            return MenuFactory.getManagerMenu();
         }
 
         // Go back -> to main menu
@@ -72,7 +65,7 @@ public class CompanyChoosingMenu implements Menu {
         // Go to concrete company menu
         CompanyActionsMenu menu = MenuFactory.getCompanyActionsMenu();
         String companyName = options.get(index);
-        menu.setCompanyName(companyName);
+        menu.setCompanyName(new Company(index + 1, companyName));
         return menu;
     }
 }

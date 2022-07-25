@@ -41,4 +41,10 @@ public class MenuFactory {
         menus.putIfAbsent("companyActionsMenu", companyActionsMenu);
         return companyActionsMenu;
     }
+
+    public static CreateCarMenu getCreateCarMenu() {
+        CreateCarMenu createCarMenu = (CreateCarMenu) menus.getOrDefault("createCarMenu", new CreateCarMenu());
+        menus.putIfAbsent("createCarMenu", createCarMenu);
+        return createCarMenu;
+    }
 }

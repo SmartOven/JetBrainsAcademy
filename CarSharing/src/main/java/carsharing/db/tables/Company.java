@@ -5,8 +5,7 @@ public class Company {
     private final String name;
 
     public Company(String companyName) {
-        this.id = -1;
-        this.name = companyName;
+        this(-1, companyName);
     }
 
     public Company(int id, String companyName) {
