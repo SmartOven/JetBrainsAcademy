@@ -1,7 +1,6 @@
 package carsharing.db.dao;
 
-import carsharing.db.tables.Car;
-import carsharing.db.tables.Company;
+import carsharing.db.tables.Customer;
 import carsharing.util.AppProperties;
 
 import java.sql.*;
@@ -9,33 +8,34 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class CarDao implements Dao<Car> {
-    private static CarDao instance;
+public class CustomerDao implements Dao<Customer> {
 
-    public static CarDao getInstance() {
+    private static CustomerDao instance;
+
+    public static CustomerDao getInstance() {
         String dbUrl = AppProperties.getDbUrl();
         if (instance == null) {
-            instance = new CarDao(dbUrl);
+            instance = new CustomerDao(dbUrl);
         }
         return instance;
     }
 
-    private CarDao(String dbUrl) {
+    private CustomerDao(String dbUrl) {
         this.dbUrl = dbUrl;
     }
 
     private final String dbUrl;
 
     /**
-     * Finds car with given id if it does exist
+     * Finds customer with given id if it does exist
      *
-     * @param id car id
-     * @return car with ID = id
+     * @param id company id
+     * @return company with ID = id
      */
     @Override
-    public Optional<Car> get(int id) {
-        String insertQuery = "SELECT ID, NAME, COMPANY_ID " +
-                "FROM CAR " +
+    public Optional<Customer> get(int id) {
+        String insertQuery = "SELECT ID, NAME, RENTED_CAR_ID " +
+                "FROM CUSTOMER " +
                 "WHERE ID = ?";
 
         // Getting result of SQL query
@@ -49,10 +49,10 @@ public class CarDao implements Dao<Car> {
                     return Optional.empty();
                 }
 
-                return Optional.of(new Car(
+                return Optional.of(new Customer(
                         resultSet.getInt("ID"),
                         resultSet.getString("NAME"),
-                        resultSet.getInt("COMPANY_ID")
+                        resultSet.getInt("RENTED_CAR_ID")
                 ));
 
             }
@@ -63,9 +63,9 @@ public class CarDao implements Dao<Car> {
     }
 
     @Override
-    public Optional<Car> getByName(String name) {
-        String insertQuery = "SELECT ID, NAME, COMPANY_ID " +
-                "FROM CAR " +
+    public Optional<Customer> getByName(String name) {
+        String insertQuery = "SELECT ID, NAME, RENTED_CAR_ID " +
+                "FROM CUSTOMER " +
                 "WHERE NAME = ?";
 
         // Getting result of SQL query
@@ -79,10 +79,17 @@ public class CarDao implements Dao<Car> {
                     return Optional.empty();
                 }
 
-                return Optional.of(new Car(
+                int rentCarId = resultSet.getInt("RENTED_CAR_ID");
+                if (rentCarId == 0) {
+                    return Optional.of(new Customer(
+                            resultSet.getInt("ID"),
+                            resultSet.getString("NAME")
+                            ));
+                }
+                return Optional.of(new Customer(
                         resultSet.getInt("ID"),
                         resultSet.getString("NAME"),
-                        resultSet.getInt("COMPANY_ID")
+                        rentCarId
                 ));
 
             }
@@ -93,14 +100,14 @@ public class CarDao implements Dao<Car> {
     }
 
     /**
-     * @return all cars
+     * @return all customers
      */
     @Override
-    public List<Car> getAll() {
-        List<Car> cars = new ArrayList<>();
+    public List<Customer> getAll() {
+        List<Customer> customers = new ArrayList<>();
 
-        String insertQuery = "SELECT ID, NAME, COMPANY_ID " +
-                "FROM CAR";
+        String insertQuery = "SELECT ID, NAME, RENTED_CAR_ID " +
+                "FROM CUSTOMER";
 
         // Getting result of SQL query
         try (Connection connection = DriverManager.getConnection(dbUrl);
@@ -108,10 +115,10 @@ public class CarDao implements Dao<Car> {
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 // Adding every found company
                 while (resultSet.next()) {
-                    cars.add(new Car(
+                    customers.add(new Customer(
                             resultSet.getInt("ID"),
                             resultSet.getString("NAME"),
-                            resultSet.getInt("COMPANY_ID")
+                            resultSet.getInt("RENTED_CAR_ID")
                     ));
                 }
             }
@@ -119,24 +126,32 @@ public class CarDao implements Dao<Car> {
             e.printStackTrace();
         }
 
-        return cars;
+        return customers;
     }
 
     /**
-     * Inserts new car into the CAR table
+     * Inserts new customer into the CUSTOMER table
      *
-     * @param car car to be inserted into table
+     * @param customer customer to be inserted into table
      */
     @Override
-    public void save(Car car) {
-        String insertQuery = "INSERT INTO CAR (NAME, COMPANY_ID) " +
-                "VALUES (?, ?)";
+    public void save(Customer customer) {
+        String insertQuery;
+        if (customer.getRented_car_id() != -1) {
+            insertQuery = "INSERT INTO CUSTOMER (ID, NAME, RENTED_CAR_ID) " +
+                    "VALUES (DEFAULT, ?, ?)";
+        } else {
+            insertQuery = "INSERT INTO CUSTOMER (ID, NAME, RENTED_CAR_ID) " +
+                    "VALUES (DEFAULT, ?, NULL)";
+        }
 
         try (Connection connection = DriverManager.getConnection(dbUrl);
              PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
             connection.setAutoCommit(true);
-            preparedStatement.setString(1, car.getName());
-            preparedStatement.setInt(2, car.getCompany_id());
+            preparedStatement.setString(1, customer.getName());
+            if (customer.getRented_car_id() != -1) {
+                preparedStatement.setInt(2, customer.getRented_car_id());
+            }
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -144,26 +159,37 @@ public class CarDao implements Dao<Car> {
     }
 
     /**
-     * Updates params of existing car
+     * Updates params of existing customer
      *
-     * @param car    car to be updated
-     * @param params new car params = [ID, NAME, COMPANY_ID]
+     * @param customer customer to be updated
+     * @param params   new customer params = [ID, NAME, RENTED_CAR_ID]
      */
     @Override
-    public void update(Car car, String[] params) {
-        String insertQuery = "UPDATE CAR " +
-                "SET NAME = ?, COMPANY_ID = ? " +
-                "WHERE ID = ?";
+    public void update(Customer customer, String[] params) {
+        String insertQuery;
 
         String name = params[1];
-        int company_id = Integer.parseInt(params[2]);
+        boolean rentedCarIDIsNull = "null".equals(params[2]);
+        if (rentedCarIDIsNull) {
+            insertQuery = "UPDATE CUSTOMER " +
+                    "SET NAME = ?, RENTED_CAR_ID = NULL " +
+                    "WHERE ID = ?";
+        } else {
+            insertQuery = "UPDATE CUSTOMER " +
+                    "SET NAME = ?, RENTED_CAR_ID = ? " +
+                    "WHERE ID = ?";
+        }
 
         try (Connection connection = DriverManager.getConnection(dbUrl);
              PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
             connection.setAutoCommit(true);
             preparedStatement.setString(1, name);
-            preparedStatement.setInt(2, company_id);
-            preparedStatement.setInt(3, car.getId());
+            if (rentedCarIDIsNull) {
+                preparedStatement.setInt(2, customer.getId());
+            } else {
+                preparedStatement.setInt(2, Integer.parseInt(params[2]));
+                preparedStatement.setInt(3, customer.getId());
+            }
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -171,56 +197,22 @@ public class CarDao implements Dao<Car> {
     }
 
     /**
-     * Deletes car from the table
+     * Deletes customer from the table
      *
-     * @param car car to be deleted
+     * @param customer company to be deleted
      */
     @Override
-    public void delete(Car car) {
-        String insertQuery = "DELETE FROM CAR " +
+    public void delete(Customer customer) {
+        String insertQuery = "DELETE FROM CUSTOMER " +
                 "WHERE ID = ?";
 
         try (Connection connection = DriverManager.getConnection(dbUrl);
              PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
             connection.setAutoCommit(true);
-            preparedStatement.setInt(1, car.getId());
+            preparedStatement.setInt(1, customer.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * Getting cars by company_id
-     *
-     * @param company company to search for
-     * @return list of company's cars
-     */
-    public List<Car> getCompanyCars(Company company) {
-        List<Car> cars = new ArrayList<>();
-
-        String insertQuery = "SELECT ID, NAME, COMPANY_ID " +
-                "FROM CAR " +
-                "WHERE COMPANY_ID = ?";
-
-        // Getting result of SQL query
-        try (Connection connection = DriverManager.getConnection(dbUrl);
-             PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
-            preparedStatement.setInt(1, company.getId());
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                // Adding every found company
-                while (resultSet.next()) {
-                    cars.add(new Car(
-                            resultSet.getInt("ID"),
-                            resultSet.getString("NAME"),
-                            resultSet.getInt("COMPANY_ID")
-                    ));
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return cars;
     }
 }

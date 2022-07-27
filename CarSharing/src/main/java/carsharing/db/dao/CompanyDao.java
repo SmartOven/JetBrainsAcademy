@@ -64,6 +64,35 @@ public class CompanyDao implements Dao<Company> {
         return Optional.empty();
     }
 
+    @Override
+    public Optional<Company> getByName(String name) {
+        String insertQuery = "SELECT ID, NAME " +
+                "FROM COMPANY " +
+                "WHERE NAME = ?";
+
+        // Getting result of SQL query
+        try (Connection connection = DriverManager.getConnection(dbUrl);
+             PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
+            preparedStatement.setString(1, name);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+
+                // Parsing result
+                if (!resultSet.next()) {
+                    return Optional.empty();
+                }
+
+                return Optional.of(new Company(
+                        resultSet.getInt("ID"),
+                        resultSet.getString("NAME")
+                ));
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return Optional.empty();
+    }
+
     /**
      * @return all companies
      */

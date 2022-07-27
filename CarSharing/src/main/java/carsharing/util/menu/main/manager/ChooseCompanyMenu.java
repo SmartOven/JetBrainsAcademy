@@ -1,24 +1,18 @@
-package carsharing.util.menu;
+package carsharing.util.menu.main.manager;
 
 import carsharing.db.tables.Company;
-import carsharing.util.menu.factory.MenuFactory;
+import carsharing.util.menu.Menu;
+import carsharing.util.MenuFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CompanyChoosingMenu implements Menu {
+public class ChooseCompanyMenu implements Menu {
     private List<String> options;
 
     public void setCompanies(List<Company> companies) {
         options = new ArrayList<>();
-        for (Company company : companies) {
-            options.add(company.getName());
-        }
-    }
-
-    @Override
-    public List<String> getOptionsList() {
-        return options;
+        companies.forEach(company -> options.add(company.getName()));
     }
 
     @Override
@@ -46,23 +40,15 @@ public class CompanyChoosingMenu implements Menu {
             return MenuFactory.getManagerMenu();
         }
 
-        // Given input is not a number
-        int index;
-        try {
-            index = Integer.parseInt(id) - 1;
-        } catch (NumberFormatException e) {
-            System.out.println("This is not a number!");
-            return this;
-        }
-
-        // Given input is not in range
-        if (index < 0 || index >= options.size()) {
-            System.out.println("This is not a number from the given range! " +
-                    "Choose the number in range from 1 to " + (options.size() - 1));
+        // Check if input is correct
+        String inputErrorMessage = parseOptionIndex(id, options);
+        if (inputErrorMessage != null) {
+            System.out.print(inputErrorMessage);
             return this;
         }
 
         // Go to concrete company menu
+        int index = Integer.parseInt(id) - 1;
         CompanyActionsMenu menu = MenuFactory.getCompanyActionsMenu();
         String companyName = options.get(index);
         menu.setCompanyName(new Company(index + 1, companyName));

@@ -19,7 +19,23 @@ import java.util.List;
  *
  */
 public interface Menu {
-    List<String> getOptionsList();
     void render();
     Menu doAction(String id);
+
+    default String parseOptionIndex(String id, List<String> options) {
+        // Given input is not a number
+        int index;
+        try {
+            index = Integer.parseInt(id) - 1;
+        } catch (NumberFormatException e) {
+            return "This is not a number!";
+        }
+
+        // Given input is not in range
+        if (index < 0 || index >= options.size()) {
+            return "This is not a number from the given range! " +
+                    "Choose the number in range from 0 to " + options.size() + "\n";
+        }
+        return null;
+    }
 }

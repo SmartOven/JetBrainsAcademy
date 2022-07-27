@@ -1,9 +1,10 @@
-package carsharing.util.menu;
+package carsharing.util.menu.main.manager;
 
 import carsharing.db.dao.CarDao;
 import carsharing.db.tables.Car;
 import carsharing.db.tables.Company;
-import carsharing.util.menu.factory.MenuFactory;
+import carsharing.util.menu.Menu;
+import carsharing.util.MenuFactory;
 
 import java.util.List;
 
@@ -21,11 +22,6 @@ public class CompanyActionsMenu implements Menu {
 
     public void setCompanyName(Company company) {
         this.company = company;
-    }
-
-    @Override
-    public List<String> getOptionsList() {
-        return options;
     }
 
     @Override

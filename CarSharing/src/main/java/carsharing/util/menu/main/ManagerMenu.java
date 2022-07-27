@@ -1,8 +1,10 @@
-package carsharing.util.menu;
+package carsharing.util.menu.main;
 
 import carsharing.db.dao.CompanyDao;
 import carsharing.db.tables.Company;
-import carsharing.util.menu.factory.MenuFactory;
+import carsharing.util.menu.Menu;
+import carsharing.util.MenuFactory;
+import carsharing.util.menu.main.manager.ChooseCompanyMenu;
 
 import java.util.List;
 
@@ -15,11 +17,6 @@ public class ManagerMenu implements Menu {
                 "Company list",
                 "Create a company"
         );
-    }
-
-    @Override
-    public List<String> getOptionsList() {
-        return options;
     }
 
     @Override
@@ -42,13 +39,13 @@ public class ManagerMenu implements Menu {
                     return this;
                 }
 
-                CompanyChoosingMenu menu = MenuFactory.getCompanyChoosingMenu();
+                ChooseCompanyMenu menu = MenuFactory.getCompanyChoosingMenu();
                 menu.setCompanies(companies);
                 return menu;
             case "2":
                 return MenuFactory.getCreateCompanyMenu();
             default:
-                System.out.println("Wrong option!");
+                System.out.println("This is not an option!");
                 return this;
         }
     }

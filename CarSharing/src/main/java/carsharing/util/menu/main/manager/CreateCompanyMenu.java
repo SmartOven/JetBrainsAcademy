@@ -1,25 +1,15 @@
-package carsharing.util.menu;
+package carsharing.util.menu.main.manager;
 
 import carsharing.db.dao.CompanyDao;
 import carsharing.db.tables.Company;
-import carsharing.util.menu.factory.MenuFactory;
-
-import java.util.List;
+import carsharing.util.menu.Menu;
+import carsharing.util.MenuFactory;
 
 public class CreateCompanyMenu implements Menu {
-    private final List<String> options;
     private final String activeOption;
 
     public CreateCompanyMenu() {
-        options = List.of(
-                "Enter the company name:"
-        );
-        activeOption = options.get(0);
-    }
-
-    @Override
-    public List<String> getOptionsList() {
-        return options;
+        activeOption = "Enter the company name:";
     }
 
     @Override

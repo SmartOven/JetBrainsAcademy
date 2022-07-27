@@ -5,6 +5,7 @@ import java.util.Optional;
 
 public interface Dao <T> {
     Optional<T> get(int id);
+    Optional<T> getByName(String name);
 
     List<T> getAll();
 

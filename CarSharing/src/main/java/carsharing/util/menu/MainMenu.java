@@ -1,6 +1,9 @@
 package carsharing.util.menu;
 
-import carsharing.util.menu.factory.MenuFactory;
+import carsharing.db.dao.CustomerDao;
+import carsharing.db.tables.Customer;
+import carsharing.util.menu.main.ChooseCustomerMenu;
+import carsharing.util.MenuFactory;
 
 import java.util.List;
 
@@ -10,13 +13,10 @@ public class MainMenu implements Menu {
     public MainMenu() {
         options = List.of(
                 "Exit",
-                "Log in as a manager"
+                "Log in as a manager",
+                "Log in as a customer",
+                "Create a customer"
         );
-    }
-
-    @Override
-    public List<String> getOptionsList() {
-        return options;
     }
 
     @Override
@@ -34,8 +34,20 @@ public class MainMenu implements Menu {
                 return null;
             case "1":
                 return MenuFactory.getManagerMenu();
+            case "2":
+                List<Customer> customers = CustomerDao.getInstance().getAll();
+                if (customers == null || customers.size() == 0) {
+                    System.out.println("The customer list is empty!");
+                    return this;
+                }
+
+                ChooseCustomerMenu menu = MenuFactory.getChoosingCustomerMenu();
+                menu.setCustomers(customers);
+                return menu;
+            case "3":
+                return MenuFactory.getCreateCustomerMenu();
             default:
-                System.out.println("Wrong option!");
+                System.out.println("This is not an option!");
                 return this;
         }
     }
