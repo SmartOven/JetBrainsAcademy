@@ -2,7 +2,7 @@
 RESTful API for booking seats at the virtual cinema
 
 ## How does API work
-###Note that:
+### Note that:
 + When talking about 'pojo' means 'Plain Old Java Object' that is automatically converted to JSON by the Spring Web
 + Every '...Info' class is pojo that either required as the body of `POST` request or being used as body for the response to the request
 
