@@ -22,7 +22,7 @@ public class ChooseCarMenu implements Menu {
 
         // Getting car names
         cars = new ArrayList<>();
-        CarDao.getInstance().getCompanyCars(company).forEach(
+        CarDao.getInstance().getCompanyCars(company, true).forEach(
                 car -> cars.add(car.getName())
         );
     }

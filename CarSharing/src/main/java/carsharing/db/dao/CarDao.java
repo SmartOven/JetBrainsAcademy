@@ -196,12 +196,19 @@ public class CarDao implements Dao<Car> {
      * @param company company to search for
      * @return list of company's cars
      */
-    public List<Car> getCompanyCars(Company company) {
+    public List<Car> getCompanyCars(Company company, boolean freeOnly) {
         List<Car> cars = new ArrayList<>();
 
         String insertQuery = "SELECT ID, NAME, COMPANY_ID " +
                 "FROM CAR " +
                 "WHERE COMPANY_ID = ?";
+
+        if (freeOnly) {
+            insertQuery = "SELECT CAR.ID AS ID, CAR.NAME AS NAME, COMPANY_ID " +
+                    "FROM CAR " +
+                    "LEFT JOIN CUSTOMER C on CAR.ID = C.RENTED_CAR_ID " +
+                    "WHERE C.ID IS NULL AND COMPANY_ID = ?;";
+        }
 
         // Getting result of SQL query
         try (Connection connection = DriverManager.getConnection(dbUrl);
@@ -222,5 +229,9 @@ public class CarDao implements Dao<Car> {
         }
 
         return cars;
+    }
+
+    public List<Car> getCompanyCars(Company company) {
+        return getCompanyCars(company, false);
     }
 }
