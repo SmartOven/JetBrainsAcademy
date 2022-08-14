@@ -14,7 +14,8 @@ public abstract class Menu {
     public void render() {}
 
     // Use this to print necessary info when getting into menu first time
-    public void renderOnCreate() {}
+    // or to initialize menu variables
+    public void onCreate() {}
 
     // Resolving user command
     // #overrideme

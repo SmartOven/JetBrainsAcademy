@@ -1,6 +1,7 @@
 package tracker.util;
 
 import org.junit.jupiter.api.Test;
+import tracker.util.validator.NameValidator;
 
 import static org.junit.jupiter.api.Assertions.*;
 

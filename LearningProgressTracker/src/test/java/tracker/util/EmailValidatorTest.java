@@ -1,13 +1,14 @@
 package tracker.util;
 
 import org.junit.jupiter.api.Test;
+import tracker.util.validator.EmailValidator;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class EmailValidatorTest {
 
     final static String[] validEmails = {
-            "email@example.com", "y.pan-01@cloud.yandex.ru"
+            "email@example.com", "y.pan-01@cloud.yandex.ru", "1@1.1", "abc123@zz09.zz09"
     };
     final static String[] invalidEmails = {
             // Empty name, empty site, empty domain, empty site name, no @, too long domain, wrong name of site

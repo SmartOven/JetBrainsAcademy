@@ -1,4 +1,4 @@
-package tracker.util;
+package tracker.util.validator;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -34,6 +34,6 @@ public class EmailValidator implements Validator {
     // Static
     private static final Pattern validEmailPattern;
     static {
-        validEmailPattern = Pattern.compile("[A-Z0-9._%+-]+@[A-Z0-9]+[A-Z0-9.-]*\\.[A-Z]{2,6}", Pattern.CASE_INSENSITIVE);
+        validEmailPattern = Pattern.compile("[A-Z0-9._%+-]+@[A-Z0-9]+[A-Z0-9.-]*\\.[A-Z0-9]{1,8}", Pattern.CASE_INSENSITIVE);
     }
 }

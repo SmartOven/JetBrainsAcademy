@@ -7,8 +7,9 @@ public class MainMenu extends Menu {
     public static MainMenu getInstance() {
         if (instance == null) {
             instance = new MainMenu();
-            nextMenu = instance;
+            instance.onCreate();
         }
+        nextMenu = instance;
         return instance;
     }
 
@@ -25,6 +26,12 @@ public class MainMenu extends Menu {
         // User wants to exit
         if ("exit".equals(command)) {
             nextMenu = null;
+            return;
+        }
+
+        // User inputs wrong exit command
+        if ("back".equals(command)) {
+            System.out.println("Enter 'exit' to exit the program");
             return;
         }
 

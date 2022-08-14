@@ -1,4 +1,6 @@
-package tracker.util;
+package tracker.util.validator;
+
+import tracker.util.StringUtil;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -12,7 +14,7 @@ public class NameValidator implements Validator {
 
     public NameValidator(String nameString) {
         // Last whitespaces group start and end indexes
-        Integer[] startEnd = StringUtil.findLastWhitespacesSequence(nameString);
+        Integer[] startEnd = StringUtil.findFirstWhitespacesSequence(nameString);
 
         if (startEnd == null) {
             // Last name doesn't exist
