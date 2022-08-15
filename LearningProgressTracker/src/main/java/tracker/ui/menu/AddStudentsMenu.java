@@ -1,5 +1,7 @@
 package tracker.ui.menu;
 
+import tracker.data.model.Student;
+import tracker.data.storage.StudentStorage;
 import tracker.util.validator.EmailValidator;
 import tracker.util.validator.NameValidator;
 import tracker.util.StringUtil;
@@ -18,9 +20,11 @@ public class AddStudentsMenu extends Menu {
     }
 
     private AddStudentsMenu() {
+        studentStorage = StudentStorage.getInstance();
     }
 
-    private static int studentsAdded;
+    private int studentsAdded;
+    private final StudentStorage studentStorage;
 
     @Override
     public void onCreate() {
@@ -73,7 +77,23 @@ public class AddStudentsMenu extends Menu {
             return;
         }
 
+        // FIXME add unit tests for the block from here
+        String firstName = nameValidator.getFirstName();
+        String lastName = nameValidator.getLastName();
+        Student student = new Student(firstName, lastName, email);
+
+        boolean studentSaved = studentStorage.save(student);
+        if (!studentSaved) {
+            System.out.println("This email is already taken.");
+            return;
+        }
+        // FIXME to here
+
         studentsAdded++;
         System.out.println("The student has been added.");
+    }
+
+    private void registerStudent() {
+
     }
 }
