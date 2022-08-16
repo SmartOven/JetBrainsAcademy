@@ -44,6 +44,13 @@ public class AddPointsMenu extends Menu {
 
         // Incorrect request
         if (!validator.isValid()) {
+            // Check if passed UUID was valid
+            if (!validator.isValidID()) {
+                System.out.println("No student is found for id=" + validator.getGivenID());
+                return;
+            }
+
+            // If it was, then it is something wrong with points format
             System.out.println("Incorrect points format.");
             return;
         }

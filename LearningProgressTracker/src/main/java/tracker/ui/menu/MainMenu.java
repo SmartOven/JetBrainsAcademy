@@ -5,6 +5,7 @@ import tracker.data.storage.StudentStorage;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class MainMenu extends Menu {
 
@@ -86,6 +87,6 @@ public class MainMenu extends Menu {
                 .findAll()
                 .stream()
                 .map(Student::getId)
-                .toList();
+                .collect(Collectors.toList());
     }
 }

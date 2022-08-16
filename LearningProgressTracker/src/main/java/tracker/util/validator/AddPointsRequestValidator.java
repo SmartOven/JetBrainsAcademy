@@ -9,6 +9,9 @@ public class AddPointsRequestValidator extends Validator {
     private List<Integer> additionalPoints;
     private UUID id;
 
+    private boolean validID;
+    private String givenID;
+
     public AddPointsRequestValidator(String requestString) {
         validate(requestString);
     }
@@ -19,6 +22,7 @@ public class AddPointsRequestValidator extends Validator {
 
         // By default, we think that something may go wrong
         valid = false;
+        validID = true;
         additionalPoints = null;
         id = null;
 
@@ -27,10 +31,12 @@ public class AddPointsRequestValidator extends Validator {
             return;
         }
 
+        givenID = requestParts[0];
         try {
-            id = UUID.fromString(requestParts[0]);
+            id = UUID.fromString(givenID);
         } catch (Exception e) {
             // Incorrect ID was passed
+            validID = false;
             return;
         }
 
@@ -55,6 +61,14 @@ public class AddPointsRequestValidator extends Validator {
 
         // Everything went well
         valid = true;
+    }
+
+    public boolean isValidID() {
+        return validID;
+    }
+
+    public String getGivenID() {
+        return givenID;
     }
 
     public List<Integer> getAdditionalPoints() {

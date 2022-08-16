@@ -63,6 +63,29 @@ class AddPointsMenuTest {
         }
     }
 
-    // FIXME
-    //  Add more tests (invalid input, valid input)
+    @Test
+    void notEnoughArgumentsTest() {
+        UUID studentID = UUID.randomUUID();
+        List<Integer> startPoints = List.of(0, 0, 0, 0);
+        Points testPoints = new Points(studentID, startPoints);
+
+        // Saving test data into storage
+        storage.save(testPoints);
+        String invalidAddPointsRequest = studentID.toString();
+        menu.resolveCommand(invalidAddPointsRequest);
+        assertEquals("Incorrect points format.", ConsoleUtil.getOutputString());
+    }
+
+    @Test
+    void notValidUUIDTest() {
+        UUID studentID = UUID.randomUUID();
+        List<Integer> startPoints = List.of(0, 0, 0, 0);
+        Points testPoints = new Points(studentID, startPoints);
+
+        // Saving test data into storage
+        storage.save(testPoints);
+        String invalidAddPointsRequest = "notUUIDString 1 1 1 1";
+        menu.resolveCommand(invalidAddPointsRequest);
+        assertEquals("No student is found for id=notUUIDString", ConsoleUtil.getOutputString());
+    }
 }
