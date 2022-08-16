@@ -29,7 +29,7 @@ public class ConsoleUtil {
     }
 
     public static String getOutputString() {
-        return outputStream.toString();
+        return outputStream.toString().trim();
     }
 
     public static String[] getOutputLines() {
