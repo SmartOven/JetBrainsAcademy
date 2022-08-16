@@ -3,7 +3,6 @@ package tracker.data.model;
 import java.util.List;
 import java.util.UUID;
 
-// FIXME add unit tests
 public class Points {
     private final UUID studentID;
     private final List<Integer> coursesPoints;
@@ -17,6 +16,10 @@ public class Points {
     }
 
     public Points(UUID studentID, List<Integer> coursesPoints) {
+        if (coursesPoints == null || coursesPoints.size() != 4) {
+            int count = (coursesPoints == null) ? 0 : coursesPoints.size();
+            throw new IllegalArgumentException("Required courses count is 4. Actual count is " + count);
+        }
         this.studentID = studentID;
         this.coursesPoints = coursesPoints;
     }

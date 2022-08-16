@@ -2,7 +2,6 @@ package tracker.data.model;
 
 import java.util.UUID;
 
-// FIXME add unit tests
 public class Student {
     private final String firstName;
     private final String lastName;

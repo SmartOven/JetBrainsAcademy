@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-// FIXME add unit tests
 public class PointsStorage {
     private static PointsStorage instance;
 
@@ -42,7 +41,15 @@ public class PointsStorage {
         studentPoints.add(points);
     }
 
-    private void delete(Points points) {
+    public void saveAll(List<Points> pointsList) {
+        studentPoints.addAll(pointsList);
+    }
+
+    public void delete(Points points) {
         studentPoints.remove(points);
+    }
+
+    public void deleteAll() {
+        studentPoints.clear();
     }
 }
