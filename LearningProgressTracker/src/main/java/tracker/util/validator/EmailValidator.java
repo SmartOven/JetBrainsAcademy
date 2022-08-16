@@ -6,7 +6,6 @@ import java.util.regex.Pattern;
 public class EmailValidator extends Validator {
 
     private String email;
-    private boolean valid;
 
     public EmailValidator(String emailString) {
         validate(emailString);
@@ -26,11 +25,6 @@ public class EmailValidator extends Validator {
     public String getEmail() {
         ifNotValidThrow("Given email is not valid");
         return email;
-    }
-
-    @Override
-    public boolean isValid() {
-        return valid;
     }
 
     // Static

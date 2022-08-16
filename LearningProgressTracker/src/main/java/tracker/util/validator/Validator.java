@@ -12,7 +12,9 @@ public abstract class Validator {
     }
 
     protected void ifNotValidThrow(String message) {
-        throw new UnsupportedOperationException(message);
+        if (!isValid()) {
+            throw new UnsupportedOperationException(message);
+        }
     }
 
     protected void ifNotValidThrow() {
