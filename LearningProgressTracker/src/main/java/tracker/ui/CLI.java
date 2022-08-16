@@ -12,6 +12,7 @@ import java.util.Scanner;
 public class CLI {
 
     private static CLI instance;
+
     public static CLI getInstance(InputStream inputStream) {
         if (instance == null) {
             instance = new CLI(inputStream);

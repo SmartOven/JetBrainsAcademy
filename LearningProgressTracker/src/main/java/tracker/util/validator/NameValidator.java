@@ -86,6 +86,7 @@ public class NameValidator extends Validator {
     // Static
     private static final Pattern validFirstNamePattern;
     private static final Pattern validLastNamePattern;
+
     static {
         validFirstNamePattern = Pattern.compile("([A-Z](?:[-']?[A-Z]+)+)", Pattern.CASE_INSENSITIVE);
         validLastNamePattern = Pattern.compile("((?:\\s[A-Z](?:[-']?[A-Z]+)+)+)", Pattern.CASE_INSENSITIVE);

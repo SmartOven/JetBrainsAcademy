@@ -1,10 +1,12 @@
 package tracker.ui.menu;
 
+import tracker.data.model.Points;
 import tracker.data.model.Student;
+import tracker.data.storage.PointsStorage;
 import tracker.data.storage.StudentStorage;
+import tracker.util.StringUtil;
 import tracker.util.validator.EmailValidator;
 import tracker.util.validator.NameValidator;
-import tracker.util.StringUtil;
 
 public class AddStudentsMenu extends Menu {
 
@@ -13,13 +15,12 @@ public class AddStudentsMenu extends Menu {
     public static AddStudentsMenu getInstance() {
         if (instance == null) {
             instance = new AddStudentsMenu();
-            nextMenu = instance;
-            instance.onCreate();
         }
         return instance;
     }
 
     private AddStudentsMenu() {
+        super();
         studentStorage = StudentStorage.getInstance();
     }
 
@@ -34,6 +35,9 @@ public class AddStudentsMenu extends Menu {
 
     @Override
     public void resolveCommand(String command) {
+        // By default, we think that menu won't change
+        setNextMenu(this);
+
         if (command == null || command.isEmpty() || command.isBlank()) {
             System.out.println("Incorrect credentials.");
             return;
@@ -42,17 +46,28 @@ public class AddStudentsMenu extends Menu {
         // If user wants to stop adding students
         if ("back".equals(command)) {
             System.out.printf("Total %d students have been added.%n", studentsAdded);
-            nextMenu = MainMenu.getInstance();
+            setNextMenu(MainMenu.getInstance());
             return;
         }
 
+        try {
+            registerStudent(command);
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+            return;
+        }
+
+        studentsAdded++;
+        System.out.println("The student has been added.");
+    }
+
+    private void registerStudent(String command) {
         // Look for firstName, lastName and email whitespace separators
         Integer[] firstWhitespaces = StringUtil.findFirstWhitespacesSequence(command);
         Integer[] lastWhitespaces = StringUtil.findLastWhitespacesSequence(command);
 
         if (firstWhitespaces == null || firstWhitespaces[0].equals(lastWhitespaces[0])) {
-            System.out.println("Incorrect credentials.");
-            return;
+            throw new IllegalArgumentException("Incorrect credentials.");
         }
 
         // Split name and email
@@ -63,37 +78,25 @@ public class AddStudentsMenu extends Menu {
         EmailValidator emailValidator = new EmailValidator(email);
 
         if (!nameValidator.isFirstNameValid()) {
-            System.out.println("Incorrect first name.");
-            return;
+            throw new IllegalArgumentException("Incorrect first name.");
         }
-
         if (!nameValidator.isLastNameValid()) {
-            System.out.println("Incorrect last name.");
-            return;
+            throw new IllegalArgumentException("Incorrect last name.");
         }
-
         if (!emailValidator.isValid()) {
-            System.out.println("Incorrect email.");
-            return;
+            throw new IllegalArgumentException("Incorrect email.");
         }
 
-        // FIXME add unit tests for the block from here
         String firstName = nameValidator.getFirstName();
         String lastName = nameValidator.getLastName();
         Student student = new Student(firstName, lastName, email);
 
         boolean studentSaved = studentStorage.save(student);
         if (!studentSaved) {
-            System.out.println("This email is already taken.");
-            return;
+            throw new IllegalArgumentException("This email is already taken.");
         }
-        // FIXME to here
 
-        studentsAdded++;
-        System.out.println("The student has been added.");
-    }
-
-    private void registerStudent() {
-
+        Points studentPoints = new Points(student.getId(), 0, 0, 0, 0);
+        PointsStorage.getInstance().save(studentPoints);
     }
 }

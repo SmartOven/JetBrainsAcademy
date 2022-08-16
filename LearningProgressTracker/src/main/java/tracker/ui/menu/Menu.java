@@ -7,15 +7,22 @@ package tracker.ui.menu;
  */
 public abstract class Menu {
 
-    protected static Menu nextMenu;
+    protected Menu nextMenu;
+
+    public Menu() {
+        nextMenu = this;
+        onCreate();
+    }
 
     // Printing necessary info each time user input something
     // #overrideme
-    public void render() {}
+    public void render() {
+    }
 
     // Use this to print necessary info when getting into menu first time
     // or to initialize menu variables
-    public void onCreate() {}
+    public void onCreate() {
+    }
 
     // Resolving user command
     // #overrideme
@@ -24,5 +31,9 @@ public abstract class Menu {
     // Getting into the next menu (if needed)
     public Menu getNextMenu() {
         return nextMenu;
+    }
+
+    public void setNextMenu(Menu nextMenu) {
+        this.nextMenu = nextMenu;
     }
 }

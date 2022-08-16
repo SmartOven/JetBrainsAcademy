@@ -10,6 +10,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class AddStudentsMenuTest {
 
+    private final AddStudentsMenu menu;
+
+    public AddStudentsMenuTest() {
+        menu = AddStudentsMenu.getInstance();
+    }
+
     @BeforeEach
     void setUp() {
         // Set system out to byte array
@@ -23,14 +29,12 @@ class AddStudentsMenuTest {
     }
 
     @Test
-    @DisplayName("Smoke test")
-    void resolveCommand() {
-        AddStudentsMenu menu = AddStudentsMenu.getInstance();
-
+    @DisplayName("Resolving commands smoke test")
+    void resolveSimpleCommand() {
         menu.resolveCommand("aa bb email@example.com");
-        assertEquals("The student has been added.", ConsoleUtil.getOutputLines()[1]);
+        assertEquals("The student has been added.", ConsoleUtil.getOutputLines()[0]);
 
         menu.resolveCommand("back");
-        assertEquals("Total 1 students have been added.", ConsoleUtil.getOutputLines()[2]);
+        assertEquals("Total 1 students have been added.", ConsoleUtil.getOutputLines()[1]);
     }
 }

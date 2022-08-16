@@ -1,5 +1,11 @@
 package tracker.ui.menu;
 
+import tracker.data.model.Student;
+import tracker.data.storage.StudentStorage;
+
+import java.util.List;
+import java.util.UUID;
+
 public class MainMenu extends Menu {
 
     private static MainMenu instance;
@@ -7,16 +13,19 @@ public class MainMenu extends Menu {
     public static MainMenu getInstance() {
         if (instance == null) {
             instance = new MainMenu();
-            instance.onCreate();
         }
-        nextMenu = instance;
         return instance;
     }
 
-    private MainMenu() {}
+    private MainMenu() {
+        super();
+    }
 
     @Override
     public void resolveCommand(String command) {
+        // By default, we think that menu won't change
+        setNextMenu(this);
+
         // No user input
         if (command == null || command.isEmpty() || command.isBlank()) {
             System.out.println("No input.");
@@ -25,7 +34,7 @@ public class MainMenu extends Menu {
 
         // User wants to exit
         if ("exit".equals(command)) {
-            nextMenu = null;
+            setNextMenu(null);
             return;
         }
 
@@ -37,11 +46,46 @@ public class MainMenu extends Menu {
 
         // Adding students
         if ("add students".equals(command)) {
-            nextMenu = AddStudentsMenu.getInstance();
+            setNextMenu(AddStudentsMenu.getInstance());
+            return;
+        }
+
+        // Printing existing students ids
+        if ("list".equals(command)) {
+            List<UUID> ids = getStudentsIDsList();
+
+            if (ids.isEmpty()) {
+                System.out.println("No students found");
+                return;
+            }
+
+            System.out.println("Students:");
+            getStudentsIDsList().forEach(System.out::println);
+            return;
+        }
+
+        // Add points
+        if ("add points".equals(command)) {
+            setNextMenu(AddPointsMenu.getInstance());
+            return;
+        }
+
+        // Find student points by his ID
+        if ("find".equals(command)) {
+            setNextMenu(FindStudentPointsMenu.getInstance());
             return;
         }
 
         // Unknown user command
         System.out.println("Error: unknown command!");
+    }
+
+    private List<UUID> getStudentsIDsList() {
+        return StudentStorage
+                .getInstance()
+                .findAll()
+                .stream()
+                .map(Student::getId)
+                .toList();
     }
 }

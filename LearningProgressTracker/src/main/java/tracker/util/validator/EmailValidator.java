@@ -29,6 +29,7 @@ public class EmailValidator extends Validator {
 
     // Static
     private static final Pattern validEmailPattern;
+
     static {
         validEmailPattern = Pattern.compile("[A-Z0-9._%+-]+@[A-Z0-9]+[A-Z0-9.-]*\\.[A-Z0-9]{1,8}", Pattern.CASE_INSENSITIVE);
     }

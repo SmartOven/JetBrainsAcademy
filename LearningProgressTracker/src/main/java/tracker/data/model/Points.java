@@ -1,5 +1,6 @@
 package tracker.data.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,7 +22,7 @@ public class Points {
             throw new IllegalArgumentException("Required courses count is 4. Actual count is " + count);
         }
         this.studentID = studentID;
-        this.coursesPoints = coursesPoints;
+        this.coursesPoints = new ArrayList<>(coursesPoints);
     }
 
     public UUID getStudentID() {
@@ -37,5 +38,17 @@ public class Points {
         coursesPoints.set(1, coursesPoints.get(1) + dsaPoints);
         coursesPoints.set(2, coursesPoints.get(2) + databasesPoints);
         coursesPoints.set(3, coursesPoints.get(3) + springPoints);
+    }
+
+    public void addPoints(List<Integer> additionalPoints) {
+        if (additionalPoints == null || additionalPoints.size() != 4) {
+            throw new IllegalArgumentException("List is null or it's size is not equals to courses count");
+        }
+        addPoints(
+                additionalPoints.get(0),
+                additionalPoints.get(1),
+                additionalPoints.get(2),
+                additionalPoints.get(3)
+        );
     }
 }
