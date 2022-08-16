@@ -5,74 +5,73 @@ import tracker.util.StringUtil;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class NameValidator implements Validator {
+public class NameValidator extends Validator {
 
-    private final String firstName;
-    private final String lastName;
-    private final boolean firstNameValid;
-    private final boolean lastNameValid;
+    private String firstName;
+    private String lastName;
+    private boolean firstNameValid;
+    private boolean lastNameValid;
 
     public NameValidator(String nameString) {
+        validate(nameString);
+        valid = firstNameValid && lastNameValid;
+    }
+
+    public NameValidator(String firstNameString, String lastNameString) {
+        validateFirstName(firstNameString);
+        validateLastName(lastNameString);
+        valid = firstNameValid && lastNameValid;
+    }
+
+    @Override
+    protected void validate(String nameString) {
         // Last whitespaces group start and end indexes
         Integer[] startEnd = StringUtil.findFirstWhitespacesSequence(nameString);
 
         if (startEnd == null) {
             // Last name doesn't exist
             // Only need to check first name validity
-            firstName = validateAndGetFirstName(nameString);
-            firstNameValid = (firstName != null);
-
-            lastName = null;
+            validateFirstName(nameString);
             lastNameValid = false;
-        } else {
-            String firstNameString = nameString.substring(0, startEnd[0]);
-            String lastNameString = nameString.substring(startEnd[1]);
-
-            // Both first and last name exists
-            // Check validity of both of them
-            firstName = validateAndGetFirstName(firstNameString);
-            firstNameValid = (firstName != null);
-
-            lastName = validateAndGetLastName(lastNameString);
-            lastNameValid = (lastName != null);
+            return;
         }
+
+        String firstNameString = nameString.substring(0, startEnd[0]);
+        String lastNameString = nameString.substring(startEnd[1]);
+
+        // Both first and last name exists
+        // Check validity of both of them
+        validateFirstName(firstNameString);
+        validateLastName(lastNameString);
     }
 
-    public NameValidator(String firstNameString, String lastNameString) {
-        firstName = validateAndGetFirstName(firstNameString);
-        firstNameValid = (firstName != null);
-
-        lastName = validateAndGetLastName(lastNameString);
-        lastNameValid = (lastName != null);
-    }
-
-    private String validateAndGetFirstName(String firstNameString) {
+    private void validateFirstName(String firstNameString) {
         Matcher firstNameMatcher = validFirstNamePattern.matcher(firstNameString);
-        if (firstNameMatcher.matches()) {
-            return firstNameMatcher.group(1);
+        if (!firstNameMatcher.matches()) {
+            firstNameValid = false;
+            return;
         }
-        return null;
+        firstNameValid = true;
+        firstName = firstNameMatcher.group(1);
     }
 
-    private String validateAndGetLastName(String lastNameString) {
+    private void validateLastName(String lastNameString) {
         Matcher lastNameMatcher = validLastNamePattern.matcher(lastNameString);
-        if (lastNameMatcher.matches()) {
-            return lastNameMatcher.group(1).substring(1);
+        if (!lastNameMatcher.matches()) {
+            lastNameValid = false;
+            return;
         }
-        return null;
+        lastNameValid = true;
+        lastName = lastNameMatcher.group(1).substring(1);
     }
 
     public String getFirstName() {
-        if (!isValid()) {
-            throw new UnsupportedOperationException("Given name is not valid");
-        }
+        ifNotValidThrow("Given name is not valid");
         return firstName;
     }
 
     public String getLastName() {
-        if (!isValid()) {
-            throw new UnsupportedOperationException("Given name is not valid");
-        }
+        ifNotValidThrow("Given name is not valid");
         return lastName;
     }
 
@@ -82,11 +81,6 @@ public class NameValidator implements Validator {
 
     public boolean isLastNameValid() {
         return lastNameValid;
-    }
-
-    @Override
-    public boolean isValid() {
-        return firstNameValid && lastNameValid;
     }
 
     // Static

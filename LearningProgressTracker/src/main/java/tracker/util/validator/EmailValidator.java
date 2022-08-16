@@ -3,26 +3,28 @@ package tracker.util.validator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class EmailValidator implements Validator {
+public class EmailValidator extends Validator {
 
-    private final String email;
-    private final boolean valid;
+    private String email;
+    private boolean valid;
 
     public EmailValidator(String emailString) {
+        validate(emailString);
+    }
+
+    @Override
+    protected void validate(String emailString) {
+        valid = false;
+
         Matcher emailMatcher = validEmailPattern.matcher(emailString);
         if (emailMatcher.matches()) {
             valid = true;
             email = emailMatcher.group();
-        } else {
-            valid = false;
-            email = null;
         }
     }
 
     public String getEmail() {
-        if (!valid) {
-            throw new UnsupportedOperationException("Given email is not valid");
-        }
+        ifNotValidThrow("Given email is not valid");
         return email;
     }
 
