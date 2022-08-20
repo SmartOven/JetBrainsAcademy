@@ -24,7 +24,7 @@ public class StudentStorage {
 
     // CRUD operations
     public List<Student> findAll() {
-        return students;
+        return new ArrayList<>(students);
     }
 
     public Optional<Student> find(UUID id) {

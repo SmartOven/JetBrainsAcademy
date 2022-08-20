@@ -2,6 +2,7 @@ package tracker.ui.menu;
 
 import tracker.data.model.Points;
 import tracker.data.storage.PointsStorage;
+import tracker.util.Statistics;
 import tracker.util.validator.AddPointsRequestValidator;
 
 import java.util.List;
@@ -70,6 +71,9 @@ public class AddPointsMenu extends Menu {
 
         // Updating points
         studentPoints.addPoints(additionalPoints);
+
+        // Updating statistics
+        Statistics.update(studentID, additionalPoints);
 
         System.out.println("Points updated.");
     }

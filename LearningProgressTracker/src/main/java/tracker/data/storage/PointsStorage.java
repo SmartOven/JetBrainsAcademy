@@ -2,10 +2,7 @@ package tracker.data.storage;
 
 import tracker.data.model.Points;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 public class PointsStorage {
     private static PointsStorage instance;
@@ -18,38 +15,44 @@ public class PointsStorage {
     }
 
     private PointsStorage() {
-        studentPoints = new ArrayList<>();
+        studentPoints = new HashMap<>();
+        studentPointsList = new LinkedList<>();
     }
 
-    private final List<Points> studentPoints;
+    private final Map<UUID, Points> studentPoints;
+    private final List<Points> studentPointsList;
 
     // CRUD operations
     public List<Points> findAll() {
-        return studentPoints;
+        return new ArrayList<>(studentPointsList);
     }
 
     public Optional<Points> find(UUID studentID) {
-        for (Points points : studentPoints) {
-            if (studentID.equals(points.getStudentID())) {
-                return Optional.of(points);
-            }
+        Points points = studentPoints.getOrDefault(studentID, null);
+        if (points == null) {
+            return Optional.empty();
         }
-        return Optional.empty();
+        return Optional.of(points);
     }
 
     public void save(Points points) {
-        studentPoints.add(points);
+        studentPoints.put(points.getStudentID(), points);
+        studentPointsList.add(points);
     }
 
     public void saveAll(List<Points> pointsList) {
-        studentPoints.addAll(pointsList);
+        for (Points points : pointsList) {
+            save(points);
+        }
     }
 
     public void delete(Points points) {
-        studentPoints.remove(points);
+        studentPoints.remove(points.getStudentID());
+        studentPointsList.remove(points);
     }
 
     public void deleteAll() {
         studentPoints.clear();
+        studentPointsList.clear();
     }
 }

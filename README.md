@@ -23,6 +23,8 @@ JetBrains Academy projects from [Java Backend Developer](https://hyperskill.org/
 ### Hard
 1) [Car Sharing](https://github.com/SmartOven/JetBrainsAcademy/tree/main/CarSharing)
 2) [JSON-XML Converter](https://github.com/SmartOven/JetBrainsAcademy/tree/main/ConverterJSON-XML)
+3) [Phone Book](https://github.com/SmartOven/JetBrainsAcademy/tree/main/PhoneBook)
+4) [Learning Progress Tracker](https://github.com/SmartOven/JetBrainsAcademy/tree/main/LearningProgressTracker)
 
 ### Challenging
 
