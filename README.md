@@ -28,4 +28,4 @@ JetBrains Academy projects from [Java Backend Developer](https://hyperskill.org/
 5) [Music Advisor](https://github.com/SmartOven/JetBrainsAcademy/tree/main/MusicAdvisor)
 
 ### Challenging
-
+1) [Recipes](https://github.com/SmartOven/JetBrainsAcademy/tree/main/Recipes)
