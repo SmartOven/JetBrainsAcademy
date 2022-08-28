@@ -1,8 +1,7 @@
-plugins {
-    id 'java'
-}
+apply plugin: 'java'
+apply plugin: 'application'
 
-group 'com.github.SmartOven'
+group 'advisor'
 version '1.0-SNAPSHOT'
 
 repositories {
@@ -10,9 +9,19 @@ repositories {
 }
 
 dependencies {
+    implementation 'com.google.code.gson:gson:2.9.0'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testImplementation 'org.junit.jupiter:junit-jupiter-params:5.9.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class' : 'advisor.Main'
+    }
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
 }
 
 test {
