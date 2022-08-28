@@ -1,8 +1,8 @@
 package advisor;
 
 public class Main {
-    public static String clientId = "84d42a9caa3b46c998e0e60aa39b6769";
-    public static String clientSecret = "694c5e96f3fe467c9d8824a3f7a78401";
+    public static String clientId = "Insert your Client ID here";
+    public static String clientSecret = "Insert your Client secret here";
     public static String redirectUri = "http://127.0.0.1:8888/";
     public static String accessServerPoint = "https://accounts.spotify.com";
     public static String resource = "https://api.spotify.com";
