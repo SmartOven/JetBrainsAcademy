@@ -29,3 +29,4 @@ JetBrains Academy projects from [Java Backend Developer](https://hyperskill.org/
 
 ### Challenging
 1) [Recipes](https://github.com/SmartOven/JetBrainsAcademy/tree/main/Recipes)
+2) [Account Service](https://github.com/SmartOven/JetBrainsAcademy/tree/main/AccountService)
