@@ -1,5 +1,7 @@
-package recipes.controller.exception;
+package recipes.controller;
 
+import org.h2.jdbc.JdbcSQLException;
+import org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -20,8 +22,16 @@ public class ControllerExceptionHandler {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = {
-            IllegalArgumentException.class
+            IllegalArgumentException.class,
+            JdbcSQLIntegrityConstraintViolationException.class,
     })
     public void handleBadRequest() {
+    }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(value = {
+            ForbiddenException.class
+    })
+    public void handleForbidden() {
     }
 }

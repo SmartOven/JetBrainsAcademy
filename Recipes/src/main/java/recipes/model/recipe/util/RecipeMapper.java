@@ -1,7 +1,10 @@
-package recipes.model.recipe;
+package recipes.model.recipe.util;
 
 import org.springframework.stereotype.Service;
 import recipes.model.Mapper;
+import recipes.model.recipe.Recipe;
+
+import java.time.LocalDateTime;
 
 @Service
 public class RecipeMapper implements Mapper<Recipe, RecipeDto> {
@@ -35,6 +38,9 @@ public class RecipeMapper implements Mapper<Recipe, RecipeDto> {
         entity.setCategory(dto.getCategory());
         entity.setIngredients(dto.getIngredients());
         entity.setDirections(dto.getDirections());
+
+        // Custom date setting
+        entity.setDate(LocalDateTime.now());
         return entity;
     }
 }

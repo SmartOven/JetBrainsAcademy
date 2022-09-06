@@ -1,14 +1,12 @@
 package recipes.model.recipe.util;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class RecipeCreationResponse {
-    private Long id;
+    private final Long id;
 }

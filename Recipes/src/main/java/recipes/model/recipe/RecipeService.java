@@ -3,6 +3,8 @@ package recipes.model.recipe;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import recipes.model.CrudService;
+import recipes.model.recipe.util.RecipeDto;
+import recipes.model.recipe.util.RecipeMapper;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -10,13 +12,13 @@ import java.util.Optional;
 
 @Service
 public class RecipeService implements CrudService<Recipe, Long> {
+    public List<Recipe> findAll() {
+        return repository.findAll();
+    }
+
     @Override
     public Optional<Recipe> findById(Long id) {
         return repository.findById(id);
-    }
-
-    public boolean existsById(Long id) {
-        return repository.existsById(id);
     }
 
     public List<Recipe> findAllByCategoryIgnoreCaseOrderByDateDesc(String category) {
@@ -27,26 +29,14 @@ public class RecipeService implements CrudService<Recipe, Long> {
         return repository.findAllByNameContainingIgnoreCaseOrderByDateDesc(name);
     }
 
-    public long count() {
-        return repository.count();
-    }
-
     @Override
     public Recipe save(Recipe recipe) {
         return repository.save(recipe);
     }
 
-    public Recipe save(RecipeDto dto) {
-        Recipe recipe = mapper.mappingToEntity(dto);
-        recipe.setDate(LocalDateTime.now());
-        return repository.save(recipe);
-    }
-
-    public Recipe update(RecipeDto dto, Long id) {
-        Recipe recipe = mapper.mappingToEntity(dto);
-        recipe.setDate(LocalDateTime.now());
-        recipe.setId(id);
-        return repository.save(recipe);
+    public void update(RecipeDto dto, Recipe recipe, Long id) {
+        recipe = mapper.mappingToEntity(recipe, dto);
+        repository.save(recipe);
     }
 
     @Override
@@ -62,8 +52,7 @@ public class RecipeService implements CrudService<Recipe, Long> {
     private final RecipeRepository repository;
     private final RecipeMapper mapper;
 
-    @Autowired
-    public RecipeService(RecipeRepository repository, RecipeMapper mapper) {
+    public RecipeService(@Autowired RecipeRepository repository, @Autowired RecipeMapper mapper) {
         this.repository = repository;
         this.mapper = mapper;
     }

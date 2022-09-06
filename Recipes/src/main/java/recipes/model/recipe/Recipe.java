@@ -4,13 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import recipes.model.author.Author;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "RECIPE")
+@Table(name = "recipe")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -41,4 +42,8 @@ public class Recipe {
     @ElementCollection
     @Column(name = "directions", nullable = false)
     private List<String> directions;
+
+    @ManyToOne
+    @JoinColumn(name = "author_id", referencedColumnName = "id", nullable = false)
+    private Author author;
 }
