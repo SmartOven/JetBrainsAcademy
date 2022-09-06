@@ -1,10 +1,13 @@
 package account.model.userdetails;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.List;
@@ -13,16 +16,27 @@ import java.util.List;
  * DTO for UserDetailsEntity
  * Implementation of UserDetails
  */
+@Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDetailsDto implements UserDetails {
 
-    @NotBlank(message = "Username can't be blank")
-    private String username;
+    //    @NotBlank(message = "Name shouldn't be blank")
+    @NotEmpty
+    private String name;
 
-    @NotBlank(message = "Password can't be blank")
-    @Size(min = 8, message = "Password size should be at least 8 characters")
+    //    @NotBlank(message = "Lastname shouldn't be blank")
+    @NotEmpty
+    private String lastname;
+
+    @Pattern(regexp = ".+@acme\\.com", message = "Email should be valid")
+    private String email;
+
+    @JsonIgnore
+    @NotEmpty
+//    @NotBlank(message = "Password shouldn't be blank")
+//    @Size(min = 8, message = "Password size should be at least 8 characters")
     private String password;
 
     private List<GrantedAuthority> authorities;
@@ -44,7 +58,7 @@ public class UserDetailsDto implements UserDetails {
 
     @Override
     public String getUsername() {
-        return username;
+        return email;
     }
 
     @Override

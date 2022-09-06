@@ -21,8 +21,17 @@ public class UserDetailsEntity {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "username", nullable = false, unique = true)
-    private String username;
+//    @Column(name = "username", nullable = false, unique = true)
+//    private String username;
+
+    @Column(name = "name", nullable = false)
+    private String name;
+
+    @Column(name = "lastname", nullable = false)
+    private String lastname;
+
+    @Column(name = "email", nullable = false)
+    private String email;
 
     @Column(name = "hashed_password", nullable = false)
     private String hashedPassword;

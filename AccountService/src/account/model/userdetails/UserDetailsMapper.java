@@ -4,11 +4,13 @@ import account.model.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
 public class UserDetailsMapper implements Mapper<UserDetailsEntity, UserDetailsDto> {
     @Override
     public UserDetailsDto mappingToDto(UserDetailsEntity entity) {
@@ -18,7 +20,9 @@ public class UserDetailsMapper implements Mapper<UserDetailsEntity, UserDetailsD
 
     @Override
     public UserDetailsDto mappingToDto(UserDetailsDto dto, UserDetailsEntity entity) {
-        dto.setUsername(entity.getUsername());
+        dto.setName(entity.getName());
+        dto.setLastname(entity.getLastname());
+        dto.setEmail(entity.getEmail());
         dto.setPassword(entity.getHashedPassword());
         dto.setAuthorities(entity.getAuthorities());
         dto.setAccountNonExpired(entity.isAccountNonExpired());
@@ -39,7 +43,9 @@ public class UserDetailsMapper implements Mapper<UserDetailsEntity, UserDetailsD
         String hashedPassword = encoder.encode(dto.getPassword()); // Hashing password
         List<GrantedAuthority> authorities = mapAuthorities(dto.getAuthorities()); // Mapping GrantedAuthorities
 
-        entity.setUsername(dto.getUsername());
+        entity.setName(dto.getName());
+        entity.setLastname(dto.getLastname());
+        entity.setEmail(dto.getEmail());
         entity.setHashedPassword(hashedPassword);
         entity.setAuthorities(authorities);
         entity.setAccountNonExpired(dto.isAccountNonExpired());

@@ -17,7 +17,7 @@ public class WebSecurityConfigureImpl extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
                 .userDetailsService(userDetailsService)
-                .passwordEncoder(getEncoder());
+                .passwordEncoder(encoder);
     }
 
     @Override
@@ -40,14 +40,12 @@ public class WebSecurityConfigureImpl extends WebSecurityConfigurerAdapter {
                 .httpBasic();
     }
 
-    @Bean
-    public PasswordEncoder getEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    public WebSecurityConfigureImpl(@Autowired UserDetailsService userDetailsService) {
+    public WebSecurityConfigureImpl(@Autowired UserDetailsService userDetailsService,
+                                    @Autowired PasswordEncoder encoder) {
         this.userDetailsService = userDetailsService;
+        this.encoder = encoder;
     }
 
     private final UserDetailsService userDetailsService;
+    private final PasswordEncoder encoder;
 }

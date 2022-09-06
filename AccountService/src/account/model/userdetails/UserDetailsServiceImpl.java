@@ -29,27 +29,32 @@ public class UserDetailsServiceImpl implements UserDetailsService, CrudService<U
 
     @Override
     public UserDetailsEntity create(UserDetailsEntity entity) {
-        return null;
+        return repository.save(entity);
     }
 
     @Override
     public Optional<UserDetailsEntity> findById(Long id) {
-        return Optional.empty();
+        return repository.findById(id);
     }
 
     @Override
     public UserDetailsEntity update(UserDetailsEntity entity) {
-        return null;
+        return repository.save(entity);
+    }
+
+    public void update(UserDetailsEntity entity, UserDetailsDto dto) {
+        entity = mapper.mappingToEntity(entity, dto);
+        update(entity);
     }
 
     @Override
     public void delete(UserDetailsEntity entity) {
-
+        repository.delete(entity);
     }
 
     @Override
     public void deleteById(Long id) {
-
+        repository.deleteById(id);
     }
 
     public UserDetailsServiceImpl(@Autowired UserDetailsRepository repository,
