@@ -5,8 +5,11 @@ import java.util.stream.Collectors;
 
 public interface Mapper<Entity, Dto> {
     Dto mappingToDto(Entity entity);
+
     Dto mappingToDto(Dto dto, Entity entity);
+
     Entity mappingToEntity(Dto dto);
+
     Entity mappingToEntity(Entity entity, Dto dto);
 
     default List<Dto> mappingToDto(List<Entity> entitiesList) {

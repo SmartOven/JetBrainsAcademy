@@ -1,6 +1,5 @@
 package account.model.userdetails;
 
-import account.model.CrudService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -11,48 +10,50 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
-public class UserDetailsServiceImpl implements UserDetailsService, CrudService<UserDetailsEntity, Long> {
-    /**
-     * Gets UserDetailsEntity object from database by username
-     * Maps it to the UserDetailsDto object and returns it
-     *
-     * @param username the username identifying the user whose data is required.
-     * @return UserDetails by username
-     * @throws UsernameNotFoundException exception when user not found
-     */
+public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserDetailsEntity entity = repository.findUserDetailsEntityByUsername(username)
+        // Using email as username
+        return repository.findUserDetailsEntityByEmail(username)
                 .orElseThrow(NoSuchElementException::new);
-        return mapper.mappingToDto(entity);
     }
 
-    @Override
-    public UserDetailsEntity create(UserDetailsEntity entity) {
+    public UserDetailsEntity create(UserDetailsDto dto) {
+        UserDetailsEntity entity = mapper.mappingToEntity(dto);
         return repository.save(entity);
     }
 
-    @Override
     public Optional<UserDetailsEntity> findById(Long id) {
         return repository.findById(id);
     }
 
-    @Override
-    public UserDetailsEntity update(UserDetailsEntity entity) {
-        return repository.save(entity);
+    public boolean existsByEmail(String email) {
+        return repository.existsByEmail(email);
     }
 
-    public void update(UserDetailsEntity entity, UserDetailsDto dto) {
-        entity = mapper.mappingToEntity(entity, dto);
-        update(entity);
+    public Optional<UserDetailsEntity> findByEmail(String email) {
+        return repository.findByEmail(email);
     }
 
-    @Override
-    public void delete(UserDetailsEntity entity) {
+    public void updateByEntity(UserDetailsEntity entity) {
+        repository.save(entity);
+    }
+
+    public void update(UserDetailsDto dto) {
+        UserDetailsEntity entity = mapper.mappingToEntity(dto);
+        repository.save(entity);
+    }
+
+//    public void update(UserDetailsEntity entity, UserDetailsDto dto) {
+//        entity = mapper.mappingToEntity(entity, dto);
+//        updateByEntity(entity);
+//    }
+
+    public void delete(UserDetailsDto dto) {
+        UserDetailsEntity entity = mapper.mappingToEntity(dto);
         repository.delete(entity);
     }
 
-    @Override
     public void deleteById(Long id) {
         repository.deleteById(id);
     }
