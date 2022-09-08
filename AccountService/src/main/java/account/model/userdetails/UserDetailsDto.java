@@ -15,10 +15,10 @@ import javax.validation.constraints.Pattern;
 public class UserDetailsDto {
     private Long id;
 
-    @NotEmpty
+//    @NotEmpty
     private String name;
 
-    @NotEmpty
+//    @NotEmpty
     private String lastname;
 
     @Pattern(regexp = ".+@acme\\.com", message = "Email should be valid")

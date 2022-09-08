@@ -6,8 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.context.request.WebRequest;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.NoSuchElementException;
 
 @ControllerAdvice
@@ -16,7 +16,7 @@ public class ApiExceptionHandler {
     @ExceptionHandler(UserExistsException.class)
     public ResponseEntity<ApiResponseErrorMessage> handleUserExistsException(
             UserExistsException e,
-            WebRequest request) {
+            HttpServletRequest request) {
 
         ApiResponseErrorMessage body = ApiResponseErrorMessage.generate(
                 HttpStatus.BAD_REQUEST, e, request
@@ -27,7 +27,7 @@ public class ApiExceptionHandler {
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ApiResponseErrorMessage> handleIllegalArgumentException(
             IllegalArgumentException e,
-            WebRequest request) {
+            HttpServletRequest request) {
 
         ApiResponseErrorMessage body = ApiResponseErrorMessage.generate(
                 HttpStatus.BAD_REQUEST, e, request
@@ -38,7 +38,7 @@ public class ApiExceptionHandler {
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<ApiResponseErrorMessage> handleNoSuchElementException(
             NoSuchElementException e,
-            WebRequest request) {
+            HttpServletRequest request) {
 
         ApiResponseErrorMessage body = ApiResponseErrorMessage.generate(
                 HttpStatus.NOT_FOUND, e, request

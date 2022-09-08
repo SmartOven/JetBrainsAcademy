@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,10 +38,11 @@ public class UserDetailsMapper implements Mapper<UserDetailsEntity, UserDetailsD
     @Override
     public UserDetailsEntity mappingToEntity(UserDetailsEntity entity, UserDetailsDto dto) {
         String hashedPassword = encoder.encode(dto.getPassword()); // Hashing password
+        String email = dto.getEmail().toLowerCase(Locale.ROOT); // lower case for case insensitivity
 
         entity.setName(dto.getName());
         entity.setLastname(dto.getLastname());
-        entity.setEmail(dto.getEmail());
+        entity.setEmail(email);
         entity.setHashedPassword(hashedPassword);
         return entity;
     }

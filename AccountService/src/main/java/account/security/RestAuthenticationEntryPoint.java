@@ -1,5 +1,7 @@
 package account.security;
 
+import account.model.userdetails.UserDetailsRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -13,6 +15,13 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
+        System.out.println("Auth exception");
+        repository.findAll().forEach(System.out::println);
         response.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage());
     }
+
+    public RestAuthenticationEntryPoint(@Autowired UserDetailsRepository repository) {
+        this.repository = repository;
+    }
+    private final UserDetailsRepository repository;
 }

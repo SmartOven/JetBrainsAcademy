@@ -28,9 +28,8 @@ public class WebSecurityConfigureImpl extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 // Testing system requirement
-                .antMatchers("/actuator/shutdown").permitAll()
                 // Sign up via "POST api/auth/signup" available to everyone
-                .mvcMatchers(HttpMethod.POST, "/api/auth/signup").permitAll()
+                .mvcMatchers(HttpMethod.POST, "/api/auth/signup", "/actuator/shutdown").permitAll()
                 // Add other rules for access authorization
                 .mvcMatchers(HttpMethod.POST, "api/auth/changepass").authenticated()
 //                .mvcMatchers(HttpMethod.GET, "api/empl/payment").hasAnyRole("USER", "ACCOUNTANT")
@@ -40,6 +39,8 @@ public class WebSecurityConfigureImpl extends WebSecurityConfigurerAdapter {
                 .mvcMatchers(HttpMethod.GET, "api/admin/user").hasRole("ADMINISTRATOR")
                 .mvcMatchers(HttpMethod.DELETE, "api/admin/user").hasRole("ADMINISTRATOR")
                 .mvcMatchers(HttpMethod.PUT, "api/admin/user/role").hasRole("ADMINISTRATOR")
+                .anyRequest().authenticated()
+//                .and().formLogin()
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS); // no session

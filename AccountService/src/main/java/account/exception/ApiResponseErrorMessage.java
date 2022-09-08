@@ -1,31 +1,37 @@
 package account.exception;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.context.request.WebRequest;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+import java.util.Map;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class ApiResponseErrorMessage {
-    private int statusCode;
     private LocalDateTime timestamp;
+    private int status;
+    private String error;
     private String message;
-    private String description;
+    private String path;
 
-    public static ApiResponseErrorMessage generate(
-            HttpStatus status,
-            Throwable e,
-            WebRequest request) {
+    public static ApiResponseErrorMessage generate(HttpStatus httpStatus, Throwable e, HttpServletRequest request) {
+        LocalDateTime timestamp = LocalDateTime.now();
+        int status = httpStatus.value();
+        String error = statusToErrorStringMap.get(httpStatus);
+        String message = e.getMessage();
+        String path = request.getRequestURI();
 
-        return new ApiResponseErrorMessage(
-                status.value(),
-                LocalDateTime.now(),
-                e.getMessage(),
-                request.getDescription(false)
-        );
+        return new ApiResponseErrorMessage(timestamp, status, error, message, path);
     }
+
+    private static final Map<HttpStatus, String> statusToErrorStringMap = Map.of(
+            HttpStatus.BAD_REQUEST, "Bad Request"
+    );
 }

@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Locale;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -14,7 +15,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         // Using email as username
-        return repository.findUserDetailsEntityByEmail(username)
+        // Email is case-insensitive
+        return findByEmail(username)
                 .orElseThrow(NoSuchElementException::new);
     }
 
@@ -28,11 +30,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     public boolean existsByEmail(String email) {
-        return repository.existsByEmail(email);
+        return repository.existsByEmail(email.toLowerCase(Locale.ROOT));
     }
 
     public Optional<UserDetailsEntity> findByEmail(String email) {
-        return repository.findByEmail(email);
+        return repository.findByEmail(email.toLowerCase(Locale.ROOT));
     }
 
     public void updateByEntity(UserDetailsEntity entity) {
