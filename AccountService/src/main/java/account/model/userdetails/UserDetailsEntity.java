@@ -1,5 +1,6 @@
 package account.model.userdetails;
 
+import account.model.grantedauthority.GrantedAuthorityImpl;
 import lombok.*;
 import org.springframework.security.core.userdetails.UserDetails;
 

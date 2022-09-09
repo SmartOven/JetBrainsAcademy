@@ -1,10 +1,9 @@
-package account.model.userdetails;
+package account.model.util;
 
+import account.model.userdetails.UserDetailsEntity;
 import lombok.Getter;
-import lombok.ToString;
 
 @Getter
-@ToString
 public class UserCreationResponse {
     private final Long id;
     private final String name;

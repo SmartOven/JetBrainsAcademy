@@ -15,13 +15,6 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
-        System.out.println("Auth exception");
-        repository.findAll().forEach(System.out::println);
         response.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage());
     }
-
-    public RestAuthenticationEntryPoint(@Autowired UserDetailsRepository repository) {
-        this.repository = repository;
-    }
-    private final UserDetailsRepository repository;
 }

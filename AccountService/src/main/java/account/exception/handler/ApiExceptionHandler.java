@@ -1,7 +1,7 @@
 package account.exception.handler;
 
 import account.exception.ApiResponseErrorMessage;
-import account.exception.UserExistsException;
+import account.exception.UserManagementException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -13,15 +13,15 @@ import java.util.NoSuchElementException;
 @ControllerAdvice
 public class ApiExceptionHandler {
 
-    @ExceptionHandler(UserExistsException.class)
+    @ExceptionHandler(UserManagementException.class)
     public ResponseEntity<ApiResponseErrorMessage> handleUserExistsException(
-            UserExistsException e,
+            UserManagementException e,
             HttpServletRequest request) {
 
         ApiResponseErrorMessage body = ApiResponseErrorMessage.generate(
                 HttpStatus.BAD_REQUEST, e, request
         );
-        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+        return ResponseEntity.badRequest().body(body);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
@@ -32,7 +32,7 @@ public class ApiExceptionHandler {
         ApiResponseErrorMessage body = ApiResponseErrorMessage.generate(
                 HttpStatus.BAD_REQUEST, e, request
         );
-        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+        return ResponseEntity.badRequest().body(body);
     }
 
     @ExceptionHandler(NoSuchElementException.class)

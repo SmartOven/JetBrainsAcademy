@@ -15,7 +15,14 @@ public class WebSecurityConfigureImpl extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
-                .userDetailsService(userDetailsService)
+                .inMemoryAuthentication()
+                .withUser("admin")
+                .password(encoder.encode("admin"))
+                .roles(ADMINISTRATOR)
+                .and()
+                .passwordEncoder(encoder);
+        auth
+                .userDetailsService(service)
                 .passwordEncoder(encoder);
     }
 
@@ -32,29 +39,32 @@ public class WebSecurityConfigureImpl extends WebSecurityConfigurerAdapter {
                 .mvcMatchers(HttpMethod.POST, "/api/auth/signup", "/actuator/shutdown").permitAll()
                 // Add other rules for access authorization
                 .mvcMatchers(HttpMethod.POST, "api/auth/changepass").authenticated()
-//                .mvcMatchers(HttpMethod.GET, "api/empl/payment").hasAnyRole("USER", "ACCOUNTANT")
+//                .mvcMatchers(HttpMethod.GET, "api/empl/payment").hasAnyRole(USER, ACCOUNTANT)
                 .mvcMatchers(HttpMethod.GET, "api/empl/payment").authenticated()
-                .mvcMatchers(HttpMethod.POST, "api/acct/payments").hasAnyRole("ACCOUNTANT")
-                .mvcMatchers(HttpMethod.PUT, "api/acct/payments").hasAnyRole("ACCOUNTANT")
-                .mvcMatchers(HttpMethod.GET, "api/admin/user").hasRole("ADMINISTRATOR")
-                .mvcMatchers(HttpMethod.DELETE, "api/admin/user").hasRole("ADMINISTRATOR")
-                .mvcMatchers(HttpMethod.PUT, "api/admin/user/role").hasRole("ADMINISTRATOR")
+                .mvcMatchers(HttpMethod.POST, "api/acct/payments").hasAnyRole(ACCOUNTANT)
+                .mvcMatchers(HttpMethod.PUT, "api/acct/payments").hasAnyRole(ACCOUNTANT)
+                .mvcMatchers(HttpMethod.GET, "api/admin/user").hasRole(ADMINISTRATOR)
+                .mvcMatchers(HttpMethod.DELETE, "api/admin/user").hasRole(ADMINISTRATOR)
+                .mvcMatchers(HttpMethod.PUT, "api/admin/user/role").hasRole(ADMINISTRATOR)
+                .mvcMatchers("/api/admin/breached-password").hasRole(ADMINISTRATOR)
                 .anyRequest().authenticated()
-//                .and().formLogin()
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS); // no session
     }
 
-    public WebSecurityConfigureImpl(@Autowired UserDetailsService userDetailsService,
+    public WebSecurityConfigureImpl(@Autowired UserDetailsService service,
                                     @Autowired PasswordEncoder encoder,
                                     @Autowired RestAuthenticationEntryPoint restAuthenticationEntryPoint) {
-        this.userDetailsService = userDetailsService;
+        this.service = service;
         this.encoder = encoder;
         this.restAuthenticationEntryPoint = restAuthenticationEntryPoint;
     }
 
-    private final UserDetailsService userDetailsService;
+    private final UserDetailsService service;
     private final PasswordEncoder encoder;
     private final RestAuthenticationEntryPoint restAuthenticationEntryPoint;
+    private static final String USER = "USER";
+    private static final String ADMINISTRATOR = "ADMINISTRATOR";
+    private static final String ACCOUNTANT = "ACCOUNTANT";
 }

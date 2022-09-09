@@ -6,6 +6,7 @@ import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 @Getter
 @Setter
@@ -15,16 +16,18 @@ import javax.validation.constraints.Pattern;
 public class UserDetailsDto {
     private Long id;
 
-//    @NotEmpty
+    @NotEmpty
     private String name;
 
-//    @NotEmpty
+    @NotEmpty
     private String lastname;
 
-    @Pattern(regexp = ".+@acme\\.com", message = "Email should be valid")
+    @NotEmpty
+    @Pattern(regexp = ".+@acme\\.com", message = "Email should meet the requirements")
     private String email;
 
-    @NotEmpty
+    @NotEmpty(message = "Password shouldn't be empty")
+    @Size(min = 12, message = "The password length must be at least 12 chars!")
     private String password;
 
     @JsonIgnore
