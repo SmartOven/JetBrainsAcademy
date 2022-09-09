@@ -28,12 +28,12 @@ public class UserDetailsController {
         return mapper.mappingToDto(createdUser);
     }
 
-    @GetMapping("/empl/payment")
-    @ResponseStatus(HttpStatus.OK)
-    public UserDetailsDto getAuthenticatedUserInfo(@AuthenticationPrincipal UserDetails details) {
-        UserDetailsEntity authenticatedUser = service.getByEmail(details.getUsername());
-        return mapper.mappingToDto(authenticatedUser);
-    }
+//    @GetMapping("/empl/payment")
+//    @ResponseStatus(HttpStatus.OK)
+//    public UserDetailsDto getAuthenticatedUserInfo(@AuthenticationPrincipal UserDetails details) {
+//        UserDetailsEntity authenticatedUser = service.getByEmail(details.getUsername());
+//        return mapper.mappingToDto(authenticatedUser);
+//    }
 
     @PostMapping("/auth/changepass")
     @ResponseStatus(HttpStatus.OK)

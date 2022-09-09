@@ -34,19 +34,15 @@ public class WebSecurityConfigureImpl extends WebSecurityConfigurerAdapter {
                 .csrf().disable().headers().frameOptions().disable() // for Postman, the H2 console
                 .and()
                 .authorizeRequests()
-                // Testing system requirement
-                // Sign up via "POST api/auth/signup" available to everyone
                 .mvcMatchers(HttpMethod.POST, "/api/auth/signup", "/actuator/shutdown").permitAll()
-                // Add other rules for access authorization
-                .mvcMatchers(HttpMethod.POST, "api/auth/changepass").authenticated()
-//                .mvcMatchers(HttpMethod.GET, "api/empl/payment").hasAnyRole(USER, ACCOUNTANT)
-                .mvcMatchers(HttpMethod.GET, "api/empl/payment").authenticated()
-                .mvcMatchers(HttpMethod.POST, "api/acct/payments").hasAnyRole(ACCOUNTANT)
-                .mvcMatchers(HttpMethod.PUT, "api/acct/payments").hasAnyRole(ACCOUNTANT)
-                .mvcMatchers(HttpMethod.GET, "api/admin/user").hasRole(ADMINISTRATOR)
-                .mvcMatchers(HttpMethod.DELETE, "api/admin/user").hasRole(ADMINISTRATOR)
-                .mvcMatchers(HttpMethod.PUT, "api/admin/user/role").hasRole(ADMINISTRATOR)
-                .mvcMatchers("/api/admin/breached-password").hasRole(ADMINISTRATOR)
+                .mvcMatchers(HttpMethod.POST, "/api/auth/changepass").authenticated() // .hasAnyRole(USER, ACCOUNTANT)
+                .mvcMatchers(HttpMethod.GET, "/api/empl/payment").authenticated()
+                .mvcMatchers(HttpMethod.POST, "/api/acct/payments").permitAll() // .hasAnyRole(ACCOUNTANT)
+                .mvcMatchers(HttpMethod.PUT, "/api/acct/payments").permitAll() // .hasAnyRole(ACCOUNTANT)
+                .mvcMatchers(HttpMethod.GET, "/api/admin/user").hasRole(ADMINISTRATOR)
+                .mvcMatchers(HttpMethod.DELETE, "/api/admin/user").hasRole(ADMINISTRATOR)
+                .mvcMatchers(HttpMethod.PUT, "/api/admin/user/role").hasRole(ADMINISTRATOR)
+                .mvcMatchers("/api/admin/breached-password").hasRole(ADMINISTRATOR) // test purposes
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement()

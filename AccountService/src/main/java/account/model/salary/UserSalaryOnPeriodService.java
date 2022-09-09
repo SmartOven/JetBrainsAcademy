@@ -10,9 +10,9 @@ import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Service
 public class UserSalaryOnPeriodService {
@@ -48,7 +48,7 @@ public class UserSalaryOnPeriodService {
         save(user, period, dto);
     }
 
-    public UserSalaryOnPeriodInfo findUserSalaryOnPeriodByEmail(String periodString, String email) {
+    public UserSalaryOnPeriodInfo findUserSalaryOnPeriodByEmailAndPeriod(String periodString, String email) {
         UserDetailsEntity user = validateUserExistsByEmailAndGet(email);
         LocalDate period = stringToLocalDate(periodString);
 
@@ -56,6 +56,15 @@ public class UserSalaryOnPeriodService {
                 .orElseThrow(() -> new NoSuchElementException("There is no salary for this user at this period"));
 
         return mapper.mappingToInfo(userSalaryOnPeriod);
+    }
+
+    public List<UserSalaryOnPeriodInfo> findUserSalaryOnPeriodByEmail(String email) {
+        UserDetailsEntity user = validateUserExistsByEmailAndGet(email);
+        return repository.findAllByUser(user)
+                .stream()
+                .sorted((o1, o2) -> o2.getPeriod().compareTo(o1.getPeriod()))
+                .map(mapper::mappingToInfo)
+                .collect(Collectors.toList());
     }
 
     void save(UserDetailsEntity user, LocalDate period, UserSalaryOnPeriodDto dto) {

@@ -10,30 +10,35 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
 public class UserSalaryOnPeriodController {
     @PostMapping("/acct/payments")
     @ResponseStatus(HttpStatus.OK)
-    public OperationStatusResponse createUserSalaryOnPeriod(@RequestBody List<UserSalaryOnPeriodDto> userSalaryOnPeriodDtoList) {
+    public OperationStatusResponse createUserSalaryOnPeriod(@RequestBody List<@Valid UserSalaryOnPeriodDto> userSalaryOnPeriodDtoList) {
         service.createAll(userSalaryOnPeriodDtoList);
         return new OperationStatusResponse("Added successfully!");
     }
 
     @PutMapping("/acct/payments")
     @ResponseStatus(HttpStatus.OK)
-    public OperationStatusResponse updateExistingUserSalaryOnPeriod(@RequestBody UserSalaryOnPeriodDto dto) {
+    public OperationStatusResponse updateExistingUserSalaryOnPeriod(@RequestBody @Valid UserSalaryOnPeriodDto dto) {
         service.update(dto);
         return new OperationStatusResponse("Updated successfully!");
     }
 
     @GetMapping("/empl/payment")
     @ResponseStatus(HttpStatus.OK)
-    public UserSalaryOnPeriodInfo findUserSalaryOnPeriodByUserDetailsAndPeriod(@RequestParam String period,
+    public List<UserSalaryOnPeriodInfo> findUserSalaryOnPeriodByUserDetailsAndPeriod(@RequestParam Map<String, String> params,
                                                                                @AuthenticationPrincipal UserDetails details) {
-        return service.findUserSalaryOnPeriodByEmail(period, details.getUsername());
+        if (!params.containsKey("period")) {
+            return service.findUserSalaryOnPeriodByEmail(details.getUsername());
+        }
+        return List.of(service.findUserSalaryOnPeriodByEmailAndPeriod(params.get("period"), details.getUsername()));
     }
 
     public UserSalaryOnPeriodController(@Autowired UserSalaryOnPeriodService service) {

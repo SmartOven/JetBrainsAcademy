@@ -4,6 +4,8 @@ import account.model.user.UserDetailsEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.format.TextStyle;
+import java.util.Locale;
 
 @Service
 public class UserSalaryOnPeriodMapper {
@@ -26,10 +28,9 @@ public class UserSalaryOnPeriodMapper {
     }
 
     static String localDateToString(LocalDate date) {
-        String month = String.valueOf(date.getMonth().getValue());
-        if (month.length() == 1) {
-            month = "0" + month;
-        }
+        String month = date.getMonth().toString().toLowerCase(Locale.ROOT);
+        month = Character.toUpperCase(month.charAt(0)) + month.substring(1);
+
         return month + "-" + date.getYear();
     }
 
