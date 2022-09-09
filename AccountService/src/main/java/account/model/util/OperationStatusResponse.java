@@ -1,4 +1,4 @@
-package account.model.breachedpassword;
+package account.model.util;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,6 +9,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class BreachedPasswordDto {
-    private String password;
+public class OperationStatusResponse {
+    private String status;
 }

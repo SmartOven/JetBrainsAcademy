@@ -1,8 +1,7 @@
-package account.model.userdetails;
+package account.model.user;
 
-import account.exception.UserManagementException;
-import account.model.breachedpassword.BreachedPasswordService;
-import account.model.breachedpassword.BreachedPasswordServiceMock;
+import account.exception.DataManagementException;
+import account.model.password.BreachedPasswordServiceMock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -82,18 +81,18 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     void validateEmailUniqueness(String email) {
         if (existsByEmail(email)) {
-            throw new UserManagementException("User exist!");
+            throw new DataManagementException("User exist!");
         }
     }
     void validatePasswordStrength(String password) {
         if (breachedPasswordService.isBreached(password)) {
-            throw new UserManagementException("The password is in the hacker's database!");
+            throw new DataManagementException("The password is in the hacker's database!");
         }
     }
 
     void validatePasswordDifference(String newPassword, String oldHashedPassword) {
         if (encoder.matches(newPassword, oldHashedPassword)) {
-            throw new UserManagementException("The passwords must be different!");
+            throw new DataManagementException("The passwords must be different!");
         }
     }
     public UserDetailsServiceImpl(@Autowired UserDetailsRepository repository,

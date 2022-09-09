@@ -1,4 +1,4 @@
-package account.model.breachedpassword;
+package account.model.password;
 
 import account.model.Mapper;
 import org.springframework.stereotype.Service;

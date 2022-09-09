@@ -1,7 +1,7 @@
 package account.exception.handler;
 
 import account.exception.ApiResponseErrorMessage;
-import account.exception.UserManagementException;
+import account.exception.DataManagementException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -13,9 +13,9 @@ import java.util.NoSuchElementException;
 @ControllerAdvice
 public class ApiExceptionHandler {
 
-    @ExceptionHandler(UserManagementException.class)
+    @ExceptionHandler(DataManagementException.class)
     public ResponseEntity<ApiResponseErrorMessage> handleUserExistsException(
-            UserManagementException e,
+            DataManagementException e,
             HttpServletRequest request) {
 
         ApiResponseErrorMessage body = ApiResponseErrorMessage.generate(

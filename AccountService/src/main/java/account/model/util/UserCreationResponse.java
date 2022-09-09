@@ -1,6 +1,6 @@
 package account.model.util;
 
-import account.model.userdetails.UserDetailsEntity;
+import account.model.user.UserDetailsEntity;
 import lombok.Getter;
 
 @Getter

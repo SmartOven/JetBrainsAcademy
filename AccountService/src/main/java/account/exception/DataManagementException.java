@@ -2,18 +2,19 @@ package account.exception;
 
 import org.springframework.validation.BindingResult;
 
-public class UserManagementException extends RuntimeException {
-    private static final String defaultErrorMessage = "Something went wrong during user management";
-
-    public UserManagementException() {
-        super(defaultErrorMessage);
+/**
+ * Override `getDefaultErrorMessage()` to set custom default message
+ */
+public class DataManagementException extends RuntimeException {
+    public DataManagementException() {
+        super("Something went wrong during data management");
     }
 
-    public UserManagementException(String message) {
+    public DataManagementException(String message) {
         super(message);
     }
 
-    public UserManagementException(BindingResult errors) {
+    public DataManagementException(BindingResult errors) {
         super(getErrorMessagesAsString(errors));
     }
 

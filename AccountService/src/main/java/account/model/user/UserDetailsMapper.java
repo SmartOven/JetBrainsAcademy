@@ -1,4 +1,4 @@
-package account.model.userdetails;
+package account.model.user;
 
 import account.model.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;

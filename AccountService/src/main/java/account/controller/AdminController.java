@@ -1,7 +1,7 @@
 package account.controller;
 
-import account.model.breachedpassword.BreachedPasswordDto;
-import account.model.breachedpassword.BreachedPasswordService;
+import account.model.password.BreachedPasswordDto;
+import account.model.password.BreachedPasswordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

@@ -1,4 +1,4 @@
-package account.model.breachedpassword;
+package account.model.password;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

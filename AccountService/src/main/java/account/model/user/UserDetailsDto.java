@@ -1,4 +1,4 @@
-package account.model.userdetails;
+package account.model.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;

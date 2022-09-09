@@ -1,8 +1,8 @@
 package account.controller;
 
-import account.exception.UserManagementException;
-import account.model.userdetails.UserDetailsMapper;
-import account.model.userdetails.*;
+import account.exception.DataManagementException;
+import account.model.user.UserDetailsMapper;
+import account.model.user.*;
 import account.model.util.NewPasswordDto;
 import account.model.util.UserChangingPasswordResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api")
@@ -23,7 +22,7 @@ public class UserDetailsController {
     public UserDetailsDto signUpNewUser(@Valid @RequestBody UserDetailsDto userDetailsDto,
                                         BindingResult errors) {
         if (errors.hasErrors()) { // validate errors handling
-            throw new UserManagementException(errors);
+            throw new DataManagementException(errors);
         }
         UserDetailsEntity createdUser = service.create(userDetailsDto);
         return mapper.mappingToDto(createdUser);
@@ -45,7 +44,7 @@ public class UserDetailsController {
             // throw new UserManagementException(errors);
             // UPD: tests are bad, so they ask for exactly this message in the response,
             //      instead of the regular one
-            throw new UserManagementException("Password length must be 12 chars minimum!");
+            throw new DataManagementException("Password length must be 12 chars minimum!");
         }
 
         String email = details.getUsername();
