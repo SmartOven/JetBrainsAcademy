@@ -32,6 +32,8 @@ public class ApiResponseErrorMessage {
     }
 
     private static final Map<HttpStatus, String> statusToErrorStringMap = Map.of(
-            HttpStatus.BAD_REQUEST, "Bad Request"
+            HttpStatus.BAD_REQUEST, "Bad Request",
+            HttpStatus.NOT_FOUND, "Not Found",
+            HttpStatus.FORBIDDEN, "Forbidden"
     );
 }

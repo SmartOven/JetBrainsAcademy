@@ -26,31 +26,43 @@ public class UserSalaryOnPeriodService {
         UserDetailsEntity user = validateUserExistsByEmailAndGet(dto.getEmployee());
 
         // Map period from String to LocalDate
-        LocalDate period = stringToLocalDate(dto.getPeriod());
+        LocalDate period = validateStringAndConvertToLocalDate(dto.getPeriod());
 
         // Check that there is no more user-period pairs exist
         validateUserPeriodPairUniqueness(user, period);
 
+        // Check that salary is not negative
+        Long salary = dto.getSalary();
+        validateSalary(salary);
+
         // Create salary
-        save(user, period, dto);
+        UserSalaryOnPeriod entity = mapper.mappingToEntity(
+                user,
+                period,
+                salary
+        );
+        repository.save(entity);
     }
 
     public void update(UserSalaryOnPeriodDto dto) {
         UserDetailsEntity user = validateUserExistsByEmailAndGet(dto.getEmployee());
 
         // Map period from String to LocalDate
-        LocalDate period = stringToLocalDate(dto.getPeriod());
+        LocalDate period = validateStringAndConvertToLocalDate(dto.getPeriod());
 
-        // Check that this user-period pair exists
-        validateUserPeriodPairExists(user, period);
+        // Check that this user-period pair exists and get it
+        UserSalaryOnPeriod entity = validateUserPeriodPairExistsAndGet(user, period);
+
+        // Update fields
+        entity = mapper.mappingToEntity(entity, user, period, dto.getSalary());
 
         // Update salary
-        save(user, period, dto);
+        repository.save(entity);
     }
 
     public UserSalaryOnPeriodInfo findUserSalaryOnPeriodByEmailAndPeriod(String periodString, String email) {
         UserDetailsEntity user = validateUserExistsByEmailAndGet(email);
-        LocalDate period = stringToLocalDate(periodString);
+        LocalDate period = validateStringAndConvertToLocalDate(periodString);
 
         UserSalaryOnPeriod userSalaryOnPeriod = repository.findByUserAndPeriod(user, period)
                 .orElseThrow(() -> new NoSuchElementException("There is no salary for this user at this period"));
@@ -67,25 +79,15 @@ public class UserSalaryOnPeriodService {
                 .collect(Collectors.toList());
     }
 
-    void save(UserDetailsEntity user, LocalDate period, UserSalaryOnPeriodDto dto) {
-        UserSalaryOnPeriod entity = mapper.mappingToEntity(
-                user,
-                period,
-                dto.getSalary()
-        );
-        repository.save(entity);
-    }
-
     void validateUserPeriodPairUniqueness(UserDetailsEntity user, LocalDate period) {
         if (repository.existsByUserAndPeriod(user, period)) {
             throw new DataManagementException("Required user already has salary at this period, use PUT method to update it");
         }
     }
 
-    void validateUserPeriodPairExists(UserDetailsEntity user, LocalDate period) {
-        if (!repository.existsByUserAndPeriod(user, period)) {
-            throw new DataManagementException("Required salary for user on this period doesn't exist, use POST method to create it");
-        }
+    UserSalaryOnPeriod validateUserPeriodPairExistsAndGet(UserDetailsEntity user, LocalDate period) {
+        return repository.findByUserAndPeriod(user, period)
+                .orElseThrow(() -> new DataManagementException("Required salary for user on this period doesn't exist, use POST method to create it"));
     }
 
     UserDetailsEntity validateUserExistsByEmailAndGet(String email) {
@@ -93,12 +95,27 @@ public class UserSalaryOnPeriodService {
                 .orElseThrow(() -> new DataManagementException("User doesn't exist"));
     }
 
-    static LocalDate stringToLocalDate(String stringDate) {
+    void validateSalary(Long salary) {
+        if (salary == null) {
+            throw new DataManagementException("Salary can't be null");
+        }
+        if (salary < 0) {
+            throw new DataManagementException("Salary can't be negative");
+        }
+    }
+
+    static LocalDate validateStringAndConvertToLocalDate(String stringDate) {
         Matcher periodMatcher = periodPattern.matcher(stringDate);
-        periodMatcher.find();
+        boolean findingResult = periodMatcher.find();
         int year = Integer.parseInt(periodMatcher.group(2));
         int month = Integer.parseInt(periodMatcher.group(1));
         int day = 1; // doesn't matter witch day to set
+        if (year < 1) {
+            throw new DataManagementException("Year can't be negative");
+        }
+        if (month < 1 || month > 12) {
+            throw new DataManagementException("Month should be in range from 1 to 12");
+        }
 
         return LocalDate.of(year, month, day);
     }
@@ -112,6 +129,7 @@ public class UserSalaryOnPeriodService {
         this.mapper = mapper;
         this.userDetailsService = userDetailsService;
     }
+
     private final UserSalaryOnPeriodRepository repository;
     private final UserSalaryOnPeriodMapper mapper;
     private final UserDetailsServiceImpl userDetailsService;

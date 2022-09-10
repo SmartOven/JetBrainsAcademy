@@ -1,8 +1,10 @@
 package account.controller;
 
 import account.exception.DataManagementException;
+import account.model.user.UserDetailsDto;
+import account.model.user.UserDetailsEntity;
 import account.model.user.UserDetailsMapper;
-import account.model.user.*;
+import account.model.user.UserDetailsServiceImpl;
 import account.model.util.NewPasswordDto;
 import account.model.util.UserChangingPasswordResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,22 +30,12 @@ public class UserDetailsController {
         return mapper.mappingToDto(createdUser);
     }
 
-//    @GetMapping("/empl/payment")
-//    @ResponseStatus(HttpStatus.OK)
-//    public UserDetailsDto getAuthenticatedUserInfo(@AuthenticationPrincipal UserDetails details) {
-//        UserDetailsEntity authenticatedUser = service.getByEmail(details.getUsername());
-//        return mapper.mappingToDto(authenticatedUser);
-//    }
-
     @PostMapping("/auth/changepass")
     @ResponseStatus(HttpStatus.OK)
     public UserChangingPasswordResponse changeUserPassword(@Valid @RequestBody NewPasswordDto newPasswordDto,
                                                            BindingResult errors,
                                                            @AuthenticationPrincipal UserDetails details) {
         if (errors.hasErrors()) { // validate errors handling
-            // throw new UserManagementException(errors);
-            // UPD: tests are bad, so they ask for exactly this message in the response,
-            //      instead of the regular one
             throw new DataManagementException("Password length must be 12 chars minimum!");
         }
 

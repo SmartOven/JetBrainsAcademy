@@ -1,6 +1,11 @@
 package account.model.authority;
 
-import lombok.*;
+import account.model.authority.enums.Authority;
+import account.model.authority.enums.AuthorityGroup;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
@@ -18,10 +23,15 @@ public class GrantedAuthorityImpl implements GrantedAuthority {
     private Long id;
 
     @Column(name = "authority", nullable = false, unique = true)
-    private String authority;
+    @Enumerated(EnumType.STRING)
+    private Authority authority;
+
+    @Column(name = "authority_group", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private AuthorityGroup authorityGroup;
 
     @Override
     public String getAuthority() {
-        return authority;
+        return authority.name();
     }
 }

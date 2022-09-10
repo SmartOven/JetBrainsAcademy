@@ -33,7 +33,28 @@ public class BreachedPasswordService {
                                    @Autowired BreachedPasswordMapper mapper) {
         this.repository = repository;
         this.mapper = mapper;
+        addDefaultBreachedPasswords();
     }
+
+    /**
+     * Added for the testing purposes to fill DB with all
+     */
+    void addDefaultBreachedPasswords() {
+        List<String> breachedPasswords = List.of(
+                "PasswordForJanuary", "PasswordForFebruary", "PasswordForMarch", "PasswordForApril",
+                "PasswordForMay", "PasswordForJune", "PasswordForJuly", "PasswordForAugust",
+                "PasswordForSeptember", "PasswordForOctober", "PasswordForNovember", "PasswordForDecember"
+        );
+        for (String breachedPassword : breachedPasswords) {
+            // If not presented yet - save
+            if (!repository.existsByPassword(breachedPassword)) {
+                BreachedPassword entity = new BreachedPassword();
+                entity.setPassword(breachedPassword);
+                repository.save(entity);
+            }
+        }
+    }
+
     private final BreachedPasswordRepository repository;
     private final BreachedPasswordMapper mapper;
 }

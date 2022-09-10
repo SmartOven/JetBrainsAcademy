@@ -1,11 +1,12 @@
 package account.model.util;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 @Getter
-@RequiredArgsConstructor
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserChangingPasswordResponse {
-    private final String email;
-    private final String status;
+    private String email;
+    private String status;
 }

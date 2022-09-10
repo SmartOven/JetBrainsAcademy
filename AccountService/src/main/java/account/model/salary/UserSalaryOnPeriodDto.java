@@ -1,9 +1,6 @@
 package account.model.salary;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
@@ -14,6 +11,7 @@ import javax.validation.constraints.Pattern;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class UserSalaryOnPeriodDto {
     @NotEmpty(message = "Employee can't be empty")
     @Pattern(regexp = ".+@acme\\.com", message = "Email should meet the requirements")
