@@ -17,13 +17,11 @@ public class AuthoritiesService {
     }
 
     public GrantedAuthorityImpl findAuthorityByRole(Role role) {
-        return findAuthority(mapper.mappingToAuthority(role));
+        return findAuthority(role.getAsAuthority());
     }
 
-    public AuthoritiesService(@Autowired AuthoritiesRepository repository,
-                              @Autowired AuthorityMapper mapper) {
+    public AuthoritiesService(@Autowired AuthoritiesRepository repository) {
         this.repository = repository;
-        this.mapper = mapper;
         addDefaultRolesToDb();
     }
 
@@ -34,7 +32,8 @@ public class AuthoritiesService {
         List<GrantedAuthorityImpl> authorities = List.of(
                 new GrantedAuthorityImpl(null, Authority.ROLE_USER, AuthorityGroup.BUSINESS),
                 new GrantedAuthorityImpl(null, Authority.ROLE_ACCOUNTANT, AuthorityGroup.BUSINESS),
-                new GrantedAuthorityImpl(null, Authority.ROLE_ADMINISTRATOR, AuthorityGroup.ADMINISTRATIVE)
+                new GrantedAuthorityImpl(null, Authority.ROLE_ADMINISTRATOR, AuthorityGroup.ADMINISTRATIVE),
+                new GrantedAuthorityImpl(null, Authority.ROLE_AUDITOR, AuthorityGroup.BUSINESS)
         );
         for (GrantedAuthorityImpl authority : authorities) { // iterate through all the roles
             // If not presented yet - save
@@ -45,5 +44,4 @@ public class AuthoritiesService {
     }
 
     private final AuthoritiesRepository repository;
-    private final AuthorityMapper mapper;
 }

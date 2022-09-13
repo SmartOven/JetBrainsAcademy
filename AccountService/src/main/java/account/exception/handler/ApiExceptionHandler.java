@@ -4,6 +4,7 @@ import account.exception.ApiResponseErrorMessage;
 import account.exception.DataManagementException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -15,7 +16,8 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler(value = {
             DataManagementException.class,
-            IllegalArgumentException.class
+            IllegalArgumentException.class,
+            UnsupportedOperationException.class
     })
     public ResponseEntity<ApiResponseErrorMessage> handleUserExistsException(
             Exception e,
@@ -39,6 +41,4 @@ public class ApiExceptionHandler {
         );
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
-
-
 }

@@ -1,5 +1,6 @@
 package account.exception;
 
+import com.google.gson.Gson;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,14 +16,14 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ApiResponseErrorMessage {
-    private LocalDateTime timestamp;
+    private String timestamp;
     private int status;
     private String error;
     private String message;
     private String path;
 
     public static ApiResponseErrorMessage generate(HttpStatus httpStatus, Throwable e, HttpServletRequest request) {
-        LocalDateTime timestamp = LocalDateTime.now();
+        String timestamp = LocalDateTime.now().toString();
         int status = httpStatus.value();
         String error = statusToErrorStringMap.get(httpStatus);
         String message = e.getMessage();
@@ -34,6 +35,11 @@ public class ApiResponseErrorMessage {
     private static final Map<HttpStatus, String> statusToErrorStringMap = Map.of(
             HttpStatus.BAD_REQUEST, "Bad Request",
             HttpStatus.NOT_FOUND, "Not Found",
-            HttpStatus.FORBIDDEN, "Forbidden"
+            HttpStatus.FORBIDDEN, "Forbidden",
+            HttpStatus.UNAUTHORIZED, "Unauthorized"
     );
+
+    public String toJsonString() {
+        return new Gson().toJson(this);
+    }
 }

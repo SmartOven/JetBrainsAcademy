@@ -1,4 +1,4 @@
-package account.model.authority;
+package account.model.util;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

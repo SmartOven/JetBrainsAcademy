@@ -1,4 +1,4 @@
-package account.model.authority.enums;
+package account.model.util.enums;
 
 public enum RoleOperation {
     GRANT,

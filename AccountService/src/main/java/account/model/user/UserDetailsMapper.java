@@ -1,8 +1,6 @@
 package account.model.user;
 
 import account.model.Mapper;
-import account.model.authority.AuthoritiesService;
-import account.model.authority.AuthorityMapper;
 import account.model.authority.GrantedAuthorityImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
